@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Ashen Valley — Tower Defense</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- HUD Bar -->
+    <div id="hud">
+      <div class="hud-left">
+        <span id="hud-lives">❤️ Lives: <span id="lives-val">20</span></span>
+      </div>
+      <div class="hud-center">
+        <span id="hud-gold">💰 Gold: <span id="gold-val">300</span></span>
+        <span id="hud-wave">🌊 Wave: <span id="wave-val">0</span><span id="wave-denom">/30</span></span>
+      </div>
+      <div class="hud-right">
+        <span id="hud-timer">⏱ <span id="timer-val">--</span></span>
+        <div id="speed-controls">
+          <button id="btn-pause" class="speed-btn active" title="Pause">⏸</button>
+          <button id="btn-1x" class="speed-btn" title="1× Speed">1×</button>
+          <button id="btn-2x" class="speed-btn" title="2× Speed">2×</button>
+          <button id="btn-auto-skip" class="speed-btn" title="Auto Skip (5s between waves)">⏭</button>
+        </div>
+        <div id="hud-user">
+          <span id="hud-username"></span>
+          <button id="btn-logout" title="Logout">⏏</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Canvas -->
+    <div id="canvas-wrapper">
+      <canvas id="game-canvas"></canvas>
+      <!-- Floating text layer -->
+      <div id="float-layer"></div>
+    </div>
+
+    <!-- Bottom Tower Panel -->
+    <div id="tower-panel">
+      <div id="tower-panel-inner">
+        <!-- Populated by ui.js -->
+      </div>
+    </div>
+
+    <!-- Tower Info Panel (right side, hidden by default) -->
+    <div id="tower-info" class="hidden">
+      <div id="tower-info-header">
+        <canvas id="ti-preview" width="44" height="44"></canvas>
+        <span id="ti-name">Tower</span>
+        <button id="ti-close">✕</button>
+      </div>
+      <div id="tower-info-body">
+        <div id="ti-stats"></div>
+        <div id="ti-ability-box" class="hidden"></div>
+        <div id="ti-kills" class="hidden">Kills: <span id="ti-kills-val">0</span></div>
+        <div id="ti-upgrade-section">
+          <button id="ti-upgrade-btn">Upgrade</button>
+        </div>
+        <div id="ti-sell-section">
+          <button id="ti-sell-btn">Sell</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wave Start Banner -->
+    <div id="wave-banner" class="hidden">
+      <div id="wave-banner-text"></div>
+    </div>
+
+    <!-- Prep Phase Overlay (wave 1 only) -->
+    <div id="prep-overlay" class="hidden">
+      <div id="prep-content">
+        <div id="prep-title">The Ashen Valley</div>
+        <div id="prep-subtitle">Place your towers and prepare for battle!</div>
+        <button id="btn-start-early">Begin!</button>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="hidden">
+      <div id="gameover-content">
+        <div id="gameover-title">DEFEAT</div>
+        <div id="gameover-subtitle">The Stronghold has fallen.</div>
+        <div id="gameover-stats"></div>
+        <div class="end-btns">
+          <button id="btn-retry">Retry</button>
+          <button id="btn-home-defeat">Home</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Victory Screen -->
+    <div id="victory-screen" class="hidden">
+      <div id="victory-content">
+        <div id="victory-title">VICTORY!</div>
+        <div id="victory-subtitle">The Ashen Valley is defended!</div>
+        <div id="victory-score"></div>
+        <div class="end-btns">
+          <button id="btn-play-again">Play Again</button>
+          <button id="btn-home">Home</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Draft Win Reward Overlay -->
+    <div id="draft-reward-overlay" class="hidden">
+      <div class="draft-reward-box">
+        <div class="reward-shine"></div>
+        <div class="reward-title">✦ DRAFT COMPLETE ✦</div>
+        <div class="reward-subtitle">You've mastered the art of the draft</div>
+        <canvas id="reward-canvas" width="140" height="140"></canvas>
+        <div class="reward-tower-name">The Jester</div>
+        <div class="reward-tower-rarity">✦ Legendary Draft Reward ✦</div>
+        <div class="reward-tower-desc">Cycles through 5 attack modes each shot:<br>Single → Circle → Line → Cone → Full AOE</div>
+        <div id="reward-new-msg" class="reward-new-msg">NEW TOWER UNLOCKED!</div>
+        <div id="reward-already-msg" class="reward-already-msg">Already owned — <b>+500 💎</b> crystals instead!</div>
+        <button id="reward-claim-btn" class="reward-claim-btn">Claim Reward</button>
+      </div>
+    </div>
+
+    <!-- Draft Overlay (Draft mode only) -->
+    <div id="draft-overlay" class="hidden">
+      <div class="draft-box">
+        <div class="draft-header">
+          <div class="draft-title">✦ Tower Draft ✦</div>
+          <div class="draft-subtitle">Wave <span id="draft-wave-num">1</span> — Pick one tower to add to your arsenal</div>
+        </div>
+        <div class="draft-choices" id="draft-choices"></div>
+        <div class="draft-pool-count">Arsenal: <span id="draft-pool-count">0</span> towers</div>
+      </div>
+    </div>
+
+    <!-- Placement Mode Indicator -->
+    <div id="placement-indicator" class="hidden">
+      Placing: <span id="placing-name"></span> — Right-click to cancel
+    </div>
+
+    <!-- Tower Hotbar Tooltip -->
+    <div id="tower-tooltip" class="hidden"></div>
+
+    <!-- Admin Panel (only shown for Admin account) -->
+    <div id="admin-panel" class="hidden">
+      <span id="admin-label">⚙ ADMIN</span>
+      <div class="admin-row">
+        <label>Wave</label>
+        <input id="admin-wave-input" type="number" min="1" max="30" value="1">
+        <button id="admin-set-wave">Jump</button>
+      </div>
+      <div class="admin-row">
+        <label>Gold</label>
+        <span id="admin-gold-label">∞</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/account.js"></script>
+  <script>
+    // Redirect to login if not authenticated
+    if (!getCurrentUser()) window.location.href = 'login.html';
+  </script>
+  <script src="js/map.js"></script>
+  <script src="js/economy.js"></script>
+  <script src="js/effects.js"></script>
+  <script src="js/enemy.js"></script>
+  <script src="js/tower.js"></script>
+  <script src="js/wave.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

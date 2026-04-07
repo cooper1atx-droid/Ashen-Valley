@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Ashen Valley — Choose Loadout</title>
+  <link rel="stylesheet" href="css/hub.css">
+  <style>
+    .loadout-page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px 40px;
+    }
+
+    .lo-header {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid #3a2e10;
+      margin-bottom: 24px;
+    }
+
+    .lo-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffd700;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(255,215,0,0.3);
+    }
+
+    /* ── Slot row ── */
+    .slot-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .slot {
+      width: 110px;
+      height: 130px;
+      border: 2px dashed #3a3010;
+      border-radius: 14px;
+      background: #0d0a06;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: default;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+
+    .slot.filled {
+      border-style: solid;
+      border-color: #40c050;
+      background: #0a1a0c;
+      box-shadow: 0 0 16px rgba(60,200,80,0.3);
+      cursor: pointer;
+    }
+
+    .slot.filled:hover {
+      border-color: #ff4040;
+      box-shadow: 0 0 16px rgba(255,60,60,0.3);
+    }
+
+    .slot-num {
+      font-size: 11px;
+      color: #504030;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .slot-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      background: #1a1a1a;
+      color: #404040;
+    }
+
+    .slot.filled .slot-icon {
+      background: var(--slot-color, #333);
+      color: var(--slot-text, #fff);
+    }
+
+    .slot-name {
+      font-size: 10px;
+      color: #706050;
+      text-align: center;
+      line-height: 1.3;
+      padding: 0 4px;
+    }
+
+    .slot.filled .slot-name {
+      color: #a0d090;
+    }
+
+    .slot-remove {
+      position: absolute;
+      top: 5px;
+      right: 8px;
+      font-size: 11px;
+      color: #604030;
+      display: none;
+    }
+
+    .slot.filled:hover .slot-remove {
+      display: block;
+      color: #ff6040;
+    }
+
+    .slot-empty-label {
+      font-size: 28px;
+      color: #2a2010;
+    }
+
+    /* ── Counter ── */
+    .lo-counter {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 15px;
+      color: #808060;
+    }
+
+    .lo-counter span {
+      color: #40c050;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    /* ── Unit grid ── */
+    .unit-pool {
+      width: 100%;
+      max-width: 860px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .pool-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding: 12px 6px 10px;
+      border-radius: 10px;
+      border: 2px solid #2a2010;
+      background: #100d08;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .pool-unit:hover {
+      transform: translateY(-3px);
+      border-color: #60a060;
+    }
+
+    .pool-unit.selected {
+      border-color: #40c050;
+      background: #0a180c;
+      box-shadow: 0 0 14px rgba(60,200,80,0.35);
+    }
+
+    .pool-unit.selected:hover {
+      border-color: #ff4040;
+    }
+
+    .pool-unit .pu-check {
+      position: absolute;
+      top: 5px;
+      right: 7px;
+      font-size: 12px;
+      color: #40c050;
+      font-weight: 900;
+    }
+
+    .pu-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .pu-canvas {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: block;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .slot-canvas {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: block;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .pu-name {
+      font-size: 10px;
+      color: #c0b090;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .pu-tier {
+      font-size: 9px;
+      color: #504030;
+    }
+
+    /* rarity borders */
+    .rb-common    { border-color: #3a3010; }
+    .rb-rare      { border-color: #1a2a3a; }
+    .rb-epic      { border-color: #2a1a3a; }
+    .rb-legendary { border-color: #3a1a0a; }
+    .rb-divine    { border-color: #3a2a00; }
+    .rb-mystery   { border-color: #4a0a4a; box-shadow: 0 0 10px rgba(200,20,200,0.5); animation: mysteryBorderPulse 2s ease-in-out infinite; }
+    @keyframes mysteryBorderPulse {
+      0%,100% { border-color: #4a0a4a; box-shadow: 0 0 10px rgba(200,20,200,0.5); }
+      50%      { border-color: #c020c0; box-shadow: 0 0 18px rgba(200,20,200,0.9); }
+    }
+
+    /* ── Enter Battle button ── */
+    .enter-btn {
+      display: block;
+      padding: 14px 60px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      border-radius: 10px;
+      border: 2px solid #5c2a10;
+      background: linear-gradient(135deg, #3a1408, #5c2010);
+      color: #ffb060;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 0 auto 12px;
+    }
+
+    .enter-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #6a2008, #a03010);
+      border-color: #ff6020;
+      box-shadow: 0 0 30px rgba(255,100,30,0.4);
+      color: #ffd090;
+    }
+
+    .enter-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .enter-hint {
+      text-align: center;
+      font-size: 12px;
+      color: #504030;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bg-canvas" class="bg-canvas"></canvas>
+
+<div class="loadout-page">
+
+  <div class="lo-header">
+    <div class="lo-title">⚔ Choose Your Loadout</div>
+    <button class="btn-icon" id="btn-back">← Back to Hub</button>
+  </div>
+
+  <!-- 5 slots -->
+  <div class="slot-row" id="slot-row"></div>
+
+  <!-- Counter -->
+  <div class="lo-counter"><span id="sel-count">0</span> / 6 selected</div>
+
+  <!-- Unit pool -->
+  <div class="unit-pool" id="unit-pool"></div>
+
+  <!-- Enter battle -->
+  <button class="enter-btn" id="btn-enter" disabled>Enter Battle</button>
+  <div class="enter-hint" id="enter-hint">Select 5 heroes to deploy</div>
+
+</div>
+
+<script src="js/map.js"></script>
+<script src="js/tower.js"></script>
+<script src="js/account.js"></script>
+<script>
+  // Render a tower model into a new <canvas> of the given size
+  function makeTowerCanvas(key, size) {
+    const cv = document.createElement('canvas');
+    cv.width = size;
+    cv.height = size;
+    const ctx = cv.getContext('2d');
+    try {
+      const t = new Tower(key, 0, 0);
+      ctx.save();
+      ctx.translate(size / 2 - t.x, size / 2 - t.y);
+      t.render(ctx, false);
+      ctx.restore();
+    } catch (e) {
+      const def = TOWER_DEFS.find(d => d.key === key);
+      ctx.fillStyle = def ? def.color : '#888';
+      ctx.beginPath(); ctx.arc(size/2, size/2, size/2 - 2, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = def ? (def.textColor || '#fff') : '#fff';
+      ctx.font = `bold ${Math.floor(size * 0.3)}px Arial`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(def ? def.abbr : '?', size/2, size/2);
+    }
+    return cv;
+  }
+</script>
+<script>
+  const _user = getCurrentUser();
+  if (!_user) window.location.href = 'login.html';
+
+  // ── Background embers (same as hub) ──
+  (function() {
+    const cv = document.getElementById('bg-canvas');
+    const cx = cv.getContext('2d');
+    function resize() { cv.width = innerWidth; cv.height = innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    const EMBERS = Array.from({ length: 60 }, () => ({
+      x: Math.random() * innerWidth, y: Math.random() * innerHeight,
+      r: Math.random() * 2.2 + 0.4, vy: -(Math.random() * 0.7 + 0.2),
+      vx: (Math.random() - 0.5) * 0.35,
+      life: Math.random(), maxLife: Math.random() * 0.7 + 0.4,
+    }));
+    function tick() {
+      cx.clearRect(0, 0, cv.width, cv.height);
+      for (const e of EMBERS) {
+        e.x += e.vx; e.y += e.vy; e.life -= 0.003;
+        if (e.life <= 0) { e.x = Math.random() * cv.width; e.y = cv.height + 10; e.life = e.maxLife; }
+        const a = (e.life / e.maxLife) * 0.75;
+        cx.beginPath(); cx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+        cx.fillStyle = `rgba(255,${90 + Math.floor(e.life * 110)},0,${a})`; cx.fill();
+      }
+      requestAnimationFrame(tick);
+    }
+    tick();
+  })();
+
+  // ── State ──
+  const isAdmin = _user.username === 'Admin';
+  const unlocked = getUnlockedUnits(_user.username);
+  let selected = getLoadout(_user.username).slice(); // start from saved loadout
+
+  // ── Build slots ──
+  function buildSlots() {
+    const row = document.getElementById('slot-row');
+    row.innerHTML = '';
+    for (let i = 0; i < 6; i++) {
+      const key = selected[i] || null;
+      const unit = key ? GACHA_POOL.find(u => u.key === key) : null;
+      const slot = document.createElement('div');
+      slot.className = 'slot' + (unit ? ' filled' : '');
+      if (unit) {
+        const numEl = document.createElement('div');
+        numEl.className = 'slot-num';
+        numEl.textContent = `Slot ${i + 1}`;
+
+        const cv = makeTowerCanvas(unit.key, 52);
+        cv.className = 'slot-canvas';
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'slot-name';
+        nameEl.textContent = unit.name;
+
+        const removeEl = document.createElement('div');
+        removeEl.className = 'slot-remove';
+        removeEl.textContent = '✕ remove';
+
+        slot.appendChild(numEl);
+        slot.appendChild(cv);
+        slot.appendChild(nameEl);
+        slot.appendChild(removeEl);
+        slot.addEventListener('click', () => { removeUnit(key); });
+      } else {
+        slot.innerHTML = `
+          <div class="slot-empty-label">+</div>
+          <div class="slot-name">Empty</div>
+        `;
+      }
+      row.appendChild(slot);
+    }
+  }
+
+  // ── Build unit pool ──
+  const RARITY_RANK = { common: 0, rare: 1, epic: 2, legendary: 3, divine: 4, mystery: 5 };
+
+  function buildPool() {
+    const pool = document.getElementById('unit-pool');
+    pool.innerHTML = '';
+    const sortedPool = [...GACHA_POOL]
+      .filter(u => unlocked.includes(u.key))
+      .sort((a, b) => RARITY_RANK[a.rarity] - RARITY_RANK[b.rarity]);
+    for (const unit of sortedPool) {
+      const isSel = selected.includes(unit.key);
+      const el = document.createElement('div');
+      el.className = `pool-unit rb-${unit.rarity}` + (isSel ? ' selected' : '');
+
+      if (isSel) {
+        const check = document.createElement('div');
+        check.className = 'pu-check';
+        check.textContent = '✓';
+        el.appendChild(check);
+      }
+
+      const cv = makeTowerCanvas(unit.key, 48);
+      cv.className = 'pu-canvas';
+      el.appendChild(cv);
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'pu-name';
+      nameEl.textContent = unit.name;
+      el.appendChild(nameEl);
+
+      const tierEl = document.createElement('div');
+      tierEl.className = 'pu-tier';
+      tierEl.textContent = `Tier ${unit.tier} · ${unit.rarity}`;
+      el.appendChild(tierEl);
+
+      el.addEventListener('click', () => {
+        if (selected.includes(unit.key)) {
+          removeUnit(unit.key);
+        } else {
+          addUnit(unit.key);
+        }
+      });
+      pool.appendChild(el);
+    }
+  }
+
+  function addUnit(key) {
+    if (selected.length >= 6) return;
+    selected.push(key);
+    refresh();
+  }
+
+  function removeUnit(key) {
+    selected = selected.filter(k => k !== key);
+    refresh();
+  }
+
+  function refresh() {
+    buildSlots();
+    buildPool();
+    document.getElementById('sel-count').textContent = selected.length;
+    const ready = selected.length >= 1;
+    document.getElementById('btn-enter').disabled = !ready;
+    document.getElementById('enter-hint').textContent = ready
+      ? 'Your heroes are ready — enter the valley!'
+      : 'Select at least 1 hero to enter the valley';
+  }
+
+  // ── Enter battle ──
+  document.getElementById('btn-enter').addEventListener('click', () => {
+    if (selected.length < 1) return;
+    saveLoadout(_user.username, selected);
+    const modeParam = new URLSearchParams(location.search).get('mode');
+    window.location.href = modeParam ? `index.html?mode=${modeParam}` : 'index.html';
+  });
+
+  document.getElementById('btn-back').addEventListener('click', () => {
+    window.location.href = 'hub.html';
+  });
+
+  // ── Show mode in title ──
+  const _modeParam = new URLSearchParams(location.search).get('mode');
+  if (_modeParam === 'infinite') {
+    document.querySelector('.lo-title').textContent = '♾ Infinite Mode — Choose Your Loadout';
+  }
+
+  // ── Init ──
+  refresh();
+</script>
+</body>
+</html>

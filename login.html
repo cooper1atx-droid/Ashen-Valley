@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Ashen Valley — Tower Defense</title>
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<canvas class="bg-canvas" id="bg-canvas"></canvas>
+
+<div class="page">
+
+  <div class="title-block">
+    <div class="game-title">The Ashen Valley</div>
+    <div class="divider"></div>
+    <div class="game-subtitle">Tower Defense</div>
+  </div>
+
+  <div class="cards">
+
+    <!-- ── NEW ACCOUNT ── -->
+    <div class="card" id="card-new">
+      <div class="card-icon">⚔️</div>
+      <div class="card-title">New Account</div>
+
+      <div class="field">
+        <label for="new-username">Commander Name</label>
+        <input id="new-username" type="text" placeholder="Enter a username" maxlength="24" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label for="new-password">Password</label>
+        <input id="new-password" type="password" placeholder="Choose a password" maxlength="64">
+      </div>
+
+      <div class="field">
+        <label for="new-confirm">Confirm Password</label>
+        <input id="new-confirm" type="password" placeholder="Repeat your password" maxlength="64">
+      </div>
+
+      <div class="msg" id="new-msg"></div>
+
+      <button class="btn btn-primary" id="btn-create">Create Account</button>
+    </div>
+
+    <!-- ── RETURNING ACCOUNT ── -->
+    <div class="card" id="card-return">
+      <div class="card-icon">🛡️</div>
+      <div class="card-title">Returning Commander</div>
+
+      <div class="field">
+        <label for="ret-username">Commander Name</label>
+        <input id="ret-username" type="text" placeholder="Your username" maxlength="24" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label for="ret-password">Password</label>
+        <input id="ret-password" type="password" placeholder="Your password" maxlength="64">
+      </div>
+
+      <div class="msg" id="ret-msg"></div>
+
+      <button class="btn btn-primary" id="btn-login">Enter the Valley</button>
+
+      <!-- Stats shown after a successful preview -->
+      <div class="stats-panel" id="stats-panel">
+        <div class="stats-row"><span>Games Played</span><span id="sp-played">0</span></div>
+        <div class="stats-row"><span>Best Score</span>  <span id="sp-score">0</span></div>
+        <div class="stats-row"><span>Best Wave</span>   <span id="sp-wave">0 / 30</span></div>
+        <div class="stats-row"><span>Total Kills</span> <span id="sp-kills">0</span></div>
+        <div class="stats-row"><span>Victories</span>   <span id="sp-wins">0</span></div>
+        <div style="color:#a09070;font-size:12px;margin-top:4px;letter-spacing:1px">RECENT RUNS</div>
+        <div class="history-list" id="sp-history"></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+  .admin-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(10,8,4,0.85);
+    border: 1px solid #2a2010;
+    border-radius: 8px;
+    padding: 8px 14px;
+    z-index: 10;
+  }
+  .admin-bar label {
+    font-size: 11px;
+    color: #504030;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    white-space: nowrap;
+  }
+  .admin-bar input {
+    background: #14100a;
+    border: 1px solid #2a2010;
+    border-radius: 4px;
+    color: #705040;
+    font-size: 12px;
+    padding: 4px 10px;
+    width: 120px;
+    font-family: monospace;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .admin-bar input:focus { border-color: #5c4a1e; color: #c8a96e; }
+  .admin-bar input.flash-success { border-color: #40c060 !important; color: #40c060 !important; }
+</style>
+
+<div class="admin-bar">
+  <label>Admin Code</label>
+  <input id="admin-code" type="password" placeholder="••••••" maxlength="32" autocomplete="off">
+</div>
+
+<script src="js/account.js"></script>
+<script>
+  // ── Background ember animation ──
+  (function() {
+    const cv = document.getElementById('bg-canvas');
+    const cx = cv.getContext('2d');
+    function resize() { cv.width = innerWidth; cv.height = innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const EMBERS = Array.from({ length: 60 }, () => ({
+      x: Math.random() * innerWidth,
+      y: Math.random() * innerHeight,
+      r: Math.random() * 2 + 0.5,
+      vy: -(Math.random() * 0.6 + 0.2),
+      vx: (Math.random() - 0.5) * 0.3,
+      life: Math.random(),
+      maxLife: Math.random() * 0.6 + 0.4,
+    }));
+
+    function tick() {
+      cx.clearRect(0, 0, cv.width, cv.height);
+      for (const e of EMBERS) {
+        e.x += e.vx;
+        e.y += e.vy;
+        e.life -= 0.003;
+        if (e.life <= 0) {
+          e.x = Math.random() * cv.width;
+          e.y = cv.height + 10;
+          e.life = e.maxLife;
+        }
+        const alpha = (e.life / e.maxLife) * 0.7;
+        cx.beginPath();
+        cx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+        cx.fillStyle = `rgba(255,${100 + Math.floor(e.life * 100)},0,${alpha})`;
+        cx.fill();
+      }
+      requestAnimationFrame(tick);
+    }
+    tick();
+  })();
+
+  // ── If already logged in, go straight to game ──
+  if (getCurrentUser()) {
+    window.location.href = 'hub.html';
+  }
+
+  // ── Create Account ──
+  document.getElementById('btn-create').addEventListener('click', () => {
+    const username = document.getElementById('new-username').value.trim();
+    const password = document.getElementById('new-password').value;
+    const confirm  = document.getElementById('new-confirm').value;
+    const msg      = document.getElementById('new-msg');
+
+    msg.className = 'msg';
+    msg.textContent = '';
+
+    if (password !== confirm) {
+      msg.textContent = 'Passwords do not match.';
+      msg.className = 'msg error';
+      return;
+    }
+
+    const result = createAccount(username, password);
+    if (!result.ok) {
+      msg.textContent = result.error;
+      msg.className = 'msg error';
+    } else {
+      msg.textContent = `Welcome, ${username}! Entering the valley…`;
+      msg.className = 'msg success';
+      setTimeout(() => { window.location.href = 'hub.html'; }, 900);
+    }
+  });
+
+  // Enter key on new account fields
+  ['new-username','new-password','new-confirm'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('btn-create').click();
+    });
+  });
+
+  // ── Login ──
+  document.getElementById('btn-login').addEventListener('click', () => {
+    const username = document.getElementById('ret-username').value.trim();
+    const password = document.getElementById('ret-password').value;
+    const msg      = document.getElementById('ret-msg');
+
+    msg.className = 'msg';
+    msg.textContent = '';
+
+    const result = loginAccount(username, password);
+    if (!result.ok) {
+      msg.textContent = result.error;
+      msg.className = 'msg error';
+      document.getElementById('stats-panel').classList.remove('visible');
+    } else {
+      // Show stats then redirect
+      const acc = result.account;
+      const s   = acc.stats;
+      document.getElementById('sp-played').textContent = s.gamesPlayed;
+      document.getElementById('sp-score').textContent  = s.bestScore.toLocaleString();
+      document.getElementById('sp-wave').textContent   = `${s.bestWave} / 30`;
+      document.getElementById('sp-kills').textContent  = s.totalKills.toLocaleString();
+      document.getElementById('sp-wins').textContent   = s.victories;
+
+      const hist = document.getElementById('sp-history');
+      hist.innerHTML = '';
+      if (acc.history.length === 0) {
+        hist.innerHTML = '<div class="history-item" style="color:#504030">No runs yet.</div>';
+      } else {
+        for (const r of acc.history.slice(0, 8)) {
+          const d = new Date(r.date);
+          const dateStr = `${d.getMonth()+1}/${d.getDate()}`;
+          hist.innerHTML += `
+            <div class="history-item">
+              <span class="${r.won ? 'won':'lost'}">${r.won ? '✓ Win' : '✗ Loss'}</span>
+              <span>Wave ${r.wave}</span>
+              <span>${r.score.toLocaleString()} pts</span>
+              <span>${dateStr}</span>
+            </div>`;
+        }
+      }
+
+      document.getElementById('stats-panel').classList.add('visible');
+      msg.textContent = `Welcome back, ${acc.username}!`;
+      msg.className = 'msg success';
+      setTimeout(() => { window.location.href = 'hub.html'; }, 1200);
+    }
+  });
+
+  // Enter key on login fields
+  ['ret-username','ret-password'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('btn-login').click();
+    });
+  });
+
+  // Admin code
+  document.getElementById('admin-code').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const input = document.getElementById('admin-code');
+      if (input.value === 'cooper') {
+        adminLogin();
+        input.classList.add('flash-success');
+        input.value = '✓ Access granted';
+        setTimeout(() => { window.location.href = 'hub.html'; }, 700);
+      } else {
+        input.value = '';
+        input.placeholder = 'Wrong code';
+      }
+    }
+  });
+</script>
+</body>
+</html>

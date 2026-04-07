@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Ashen Valley — Command Hub</title>
+  <link rel="stylesheet" href="css/hub.css">
+</head>
+<body>
+
+<canvas id="bg-canvas" class="bg-canvas"></canvas>
+
+<div class="hub-page">
+
+  <!-- Header -->
+  <div class="hub-header">
+    <div class="hub-title">The Ashen Valley</div>
+    <div class="hub-header-right">
+      <span class="crystal-display">💎 <span id="crystal-count">0</span></span>
+      <span class="username-display" id="hub-username"></span>
+      <button class="btn-icon" id="btn-logout" title="Logout">⏏ Logout</button>
+    </div>
+  </div>
+
+  <!-- Welcome -->
+  <div class="hub-welcome">
+    <div class="welcome-text">Welcome back, Commander <span id="welcome-name"></span></div>
+    <div class="welcome-sub">Your stronghold awaits.</div>
+  </div>
+
+  <!-- Main Menu -->
+  <div class="menu-grid">
+
+    <div class="menu-card card-draft" id="card-draft">
+      <div class="card-glow"></div>
+      <div class="card-icon">🃏</div>
+      <div class="card-title">Draft</div>
+      <div class="card-desc">Pick towers one by one — adapt to what fate deals you</div>
+    </div>
+
+    <div class="menu-card card-infinite" id="card-infinite">
+      <div class="card-glow"></div>
+      <div class="card-icon">♾️</div>
+      <div class="card-title">Infinite</div>
+      <div class="card-desc">Endless waves — how long can you survive?</div>
+    </div>
+
+    <div class="menu-card card-summon" id="card-summon">
+      <div class="card-glow"></div>
+      <div class="card-icon">💎</div>
+      <div class="card-title">Summon</div>
+      <div class="card-desc">Roll for new units to command in battle</div>
+    </div>
+
+<div class="menu-card card-profile" id="card-profile">
+      <div class="card-glow"></div>
+      <div class="card-icon">📜</div>
+      <div class="card-title">Profile</div>
+      <div class="card-desc">View your stats, history and collection</div>
+    </div>
+
+    <div class="menu-card card-enemies" id="card-enemies">
+      <div class="card-glow"></div>
+      <div class="card-icon">👾</div>
+      <div class="card-title">Enemies</div>
+      <div class="card-desc">Discover every foe that haunts the valley</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===================== SUMMON MODAL ===================== -->
+<div class="modal-overlay hidden" id="summon-modal">
+  <div class="modal summon-modal-box">
+    <div class="modal-header">
+      <span class="modal-title">✦ Summon Chamber ✦</span>
+      <button class="modal-close" id="summon-close">✕</button>
+    </div>
+
+    <div class="summon-info">
+      <span class="summon-crystals">💎 <span id="summon-crystal-count">0</span> crystals</span>
+      <span class="summon-collection">Collection: <span id="summon-collected">0</span> / 100</span>
+    </div>
+
+    <div class="summon-roll-area" id="summon-roll-area">
+      <div class="summon-idle-text" id="summon-idle">Roll to summon units for battle!</div>
+      <div class="summon-results hidden" id="summon-results"></div>
+    </div>
+
+    <div class="summon-dupe-info hidden" id="summon-dupe-info"></div>
+
+    <div class="summon-buttons">
+      <button class="btn-roll btn-single" id="btn-single-roll">
+        <span class="roll-label">Single Summon</span>
+        <span class="roll-cost">💎 100</span>
+      </button>
+      <button class="btn-roll btn-multi" id="btn-multi-roll">
+        <span class="roll-label">10× Summon</span>
+        <span class="roll-cost">💎 900</span>
+      </button>
+    </div>
+
+    <div class="rarity-rates" id="rarity-rates"></div>
+  </div>
+</div>
+
+<!-- ===================== LOADOUT MODAL ==================== -->
+<div class="modal-overlay hidden" id="loadout-modal">
+  <div class="modal loadout-modal-box">
+    <div class="modal-header">
+      <span class="modal-title">🛡️ Battle Loadout</span>
+      <button class="modal-close" id="loadout-close">✕</button>
+    </div>
+    <div class="loadout-info">
+      <span class="loadout-counter">Selected: <span id="loadout-count">0</span> / 5</span>
+      <span class="loadout-hint">Pick exactly 5 heroes to bring into battle</span>
+    </div>
+    <div class="loadout-grid" id="loadout-grid"></div>
+    <div class="loadout-footer">
+      <button class="btn-loadout-save" id="btn-loadout-save">Save Loadout</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PROFILE MODAL ==================== -->
+<div class="modal-overlay hidden" id="profile-modal">
+  <div class="modal profile-modal-box">
+    <div class="modal-header">
+      <span class="modal-title">📜 Commander Profile</span>
+      <button class="modal-close" id="profile-close">✕</button>
+    </div>
+
+    <div class="profile-body">
+      <div class="profile-name" id="profile-name"></div>
+      <div class="profile-stats" id="profile-stats"></div>
+
+      <div class="collection-header">Collection (<span id="collection-count">0</span> / 100)</div>
+      <div class="collection-grid" id="collection-grid"></div>
+
+      <div class="history-header">Recent Runs</div>
+      <div class="history-list" id="profile-history"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ENEMIES MODAL ==================== -->
+<div class="modal-overlay hidden" id="enemies-modal">
+  <div class="modal enemies-modal-box">
+    <div class="modal-header">
+      <span class="modal-title">👾 Enemy Codex</span>
+      <button class="modal-close" id="enemies-close">✕</button>
+    </div>
+    <div class="enemies-modal-body">
+      <div class="enemies-filter-bar">
+        <span class="enemies-filter-label">Filter:</span>
+        <button class="enemy-filter-btn active" data-filter="all">All</button>
+        <button class="enemy-filter-btn" data-filter="discovered">Discovered</button>
+        <button class="enemy-filter-btn" data-filter="undiscovered">Undiscovered</button>
+      </div>
+      <div class="enemies-grid" id="enemies-grid"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/map.js"></script>
+<script src="js/enemy.js"></script>
+<script src="js/tower.js"></script>
+<script src="js/account.js"></script>
+<script>
+// ── Tower canvas preview helper ──
+function makeTowerCanvas(key, size, locked) {
+  const cv = document.createElement('canvas');
+  cv.width = size; cv.height = size;
+  const ctx = cv.getContext('2d');
+  try {
+    const t = new Tower(key, 0, 0);
+    ctx.save();
+    ctx.translate(size / 2 - t.x, size / 2 - t.y);
+    if (locked) ctx.filter = 'grayscale(1) brightness(0.35)';
+    t.render(ctx, false);
+    ctx.restore();
+  } catch (e) {
+    const def = TOWER_DEFS.find(d => d.key === key);
+    ctx.fillStyle = locked ? '#333' : (def ? def.color : '#888');
+    ctx.beginPath(); ctx.arc(size/2, size/2, size/2 - 2, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = locked ? '#555' : (def ? (def.textColor || '#fff') : '#fff');
+    ctx.font = `bold ${Math.floor(size * 0.3)}px Arial`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(locked ? '🔒' : (def ? def.abbr : '?'), size/2, size/2);
+  }
+  if (locked) {
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.beginPath(); ctx.arc(size/2, size/2, size/2 - 1, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'rgba(180,140,80,0.7)';
+    ctx.font = `bold ${Math.floor(size * 0.38)}px Arial`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('🔒', size/2, size/2);
+  }
+  return cv;
+}
+
+// ── Guard: redirect if not logged in ──
+const _user = getCurrentUser();
+if (!_user) window.location.href = 'login.html';
+
+// ── Background embers ──
+(function() {
+  const cv = document.getElementById('bg-canvas');
+  const cx = cv.getContext('2d');
+  function resize() { cv.width = innerWidth; cv.height = innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const EMBERS = Array.from({ length: 70 }, () => ({
+    x: Math.random() * innerWidth,
+    y: Math.random() * innerHeight,
+    r: Math.random() * 2.2 + 0.4,
+    vy: -(Math.random() * 0.7 + 0.2),
+    vx: (Math.random() - 0.5) * 0.35,
+    life: Math.random(),
+    maxLife: Math.random() * 0.7 + 0.4,
+  }));
+  function tick() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    for (const e of EMBERS) {
+      e.x += e.vx; e.y += e.vy; e.life -= 0.003;
+      if (e.life <= 0) { e.x = Math.random() * cv.width; e.y = cv.height + 10; e.life = e.maxLife; }
+      const a = (e.life / e.maxLife) * 0.75;
+      cx.beginPath();
+      cx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+      cx.fillStyle = `rgba(255,${90 + Math.floor(e.life * 110)},0,${a})`;
+      cx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+// ── Populate header ──
+document.getElementById('hub-username').textContent = '⚔ ' + _user.username;
+document.getElementById('welcome-name').textContent = _user.username;
+document.getElementById('crystal-count').textContent = getCrystals(_user.username).toLocaleString();
+
+// ── Menu card navigation ──
+
+document.getElementById('card-infinite').addEventListener('click', () => {
+  window.location.href = 'loadout.html?mode=infinite';
+});
+
+document.getElementById('card-summon').addEventListener('click', openSummonModal);
+document.getElementById('card-profile').addEventListener('click', openProfileModal);
+
+document.getElementById('btn-logout').addEventListener('click', () => {
+  logout();
+});
+
+// ── Rarity rates display ──
+(function buildRarityRates() {
+  const totalWeight = GACHA_POOL.reduce((s, u) => s + u.weight, 0);
+  const rarities = ['common', 'rare', 'epic', 'legendary', 'divine'];
+  const labels   = { common: 'Common', rare: 'Rare', epic: 'Epic', legendary: 'Legendary', divine: 'Divine' };
+  const icons    = { common: '■', rare: '■', epic: '■', legendary: '■', divine: '✦' };
+  const container = document.getElementById('rarity-rates');
+  for (const r of rarities) {
+    const rWeight = GACHA_POOL.filter(u => u.rarity === r).reduce((s, u) => s + u.weight, 0);
+    const pct = (rWeight / totalWeight * 100).toFixed(1);
+    const row = document.createElement('div');
+    row.className = 'rate-row';
+    row.innerHTML = `<span class="rate-icon legend-${r}">${icons[r]}</span><span class="rate-label">${labels[r]}</span><span class="rate-pct">${pct}%</span>`;
+    container.appendChild(row);
+  }
+})();
+
+// ── Helpers ──
+function refreshCrystalDisplay() {
+  const c = getCrystals(_user.username).toLocaleString();
+  document.getElementById('crystal-count').textContent = c;
+  document.getElementById('summon-crystal-count').textContent = c;
+}
+
+function getCollectedCount() {
+  return getUnlockedUnits(_user.username).length;
+}
+
+// ============================================================
+//  SUMMON MODAL
+// ============================================================
+function openSummonModal() {
+  refreshCrystalDisplay();
+  document.getElementById('summon-collected').textContent = getCollectedCount();
+  document.getElementById('summon-idle').classList.remove('hidden');
+  document.getElementById('summon-results').classList.add('hidden');
+  document.getElementById('summon-results').innerHTML = '';
+  document.getElementById('summon-dupe-info').classList.add('hidden');
+  document.getElementById('summon-modal').classList.remove('hidden');
+}
+
+document.getElementById('summon-close').addEventListener('click', () => {
+  document.getElementById('summon-modal').classList.add('hidden');
+});
+document.getElementById('summon-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('summon-modal'))
+    document.getElementById('summon-modal').classList.add('hidden');
+});
+
+document.getElementById('btn-single-roll').addEventListener('click', () => doRoll(false));
+document.getElementById('btn-multi-roll').addEventListener('click',  () => doRoll(true));
+
+function doRoll(isMulti) {
+  const results = isMulti ? tenRollGacha(_user.username) : rollGacha(_user.username);
+  if (!results) {
+    flashNotEnoughCrystals();
+    return;
+  }
+  refreshCrystalDisplay();
+  document.getElementById('summon-collected').textContent = getCollectedCount();
+  document.getElementById('summon-idle').classList.add('hidden');
+  showRollResults(results);
+}
+
+function flashNotEnoughCrystals() {
+  const btn1 = document.getElementById('btn-single-roll');
+  const btn2 = document.getElementById('btn-multi-roll');
+  [btn1, btn2].forEach(b => { b.classList.add('flash-error'); setTimeout(() => b.classList.remove('flash-error'), 600); });
+}
+
+function showRollResults(results) {
+  const area = document.getElementById('summon-results');
+  area.innerHTML = '';
+  area.classList.remove('hidden');
+
+  let dupeCount = 0;
+  let dupeTotal = 0;
+  results.forEach((r, i) => {
+    const card = buildResultCard(r);
+    card.style.animationDelay = `${i * 0.12}s`;
+    card.classList.add('card-reveal');
+    area.appendChild(card);
+    if (r.isDupe) {
+      dupeCount++;
+      dupeTotal += RARITY_DUPE_CRYSTALS[r.rarity] || 10;
+    }
+  });
+
+  if (dupeCount > 0) {
+    const info = document.getElementById('summon-dupe-info');
+    info.textContent = `${dupeCount} duplicate${dupeCount > 1 ? 's' : ''} converted → +${dupeTotal} 💎`;
+    info.classList.remove('hidden');
+    refreshCrystalDisplay();
+  } else {
+    document.getElementById('summon-dupe-info').classList.add('hidden');
+  }
+}
+
+function buildResultCard(unit) {
+  const card = document.createElement('div');
+  card.className = `result-card rarity-${unit.rarity}`;
+
+  const tagEl = document.createElement('div');
+  tagEl.className = unit.isDupe ? 'dupe-tag' : 'new-tag';
+  tagEl.textContent = unit.isDupe ? 'DUPE' : 'NEW!';
+  card.appendChild(tagEl);
+
+  const cv = makeTowerCanvas(unit.key, 44, false);
+  cv.className = 'result-canvas';
+  card.appendChild(cv);
+
+  const nameEl = document.createElement('div');
+  nameEl.className = 'result-name';
+  nameEl.textContent = unit.name;
+  card.appendChild(nameEl);
+
+  const rarityEl = document.createElement('div');
+  rarityEl.className = `result-rarity rarity-text-${unit.rarity}`;
+  rarityEl.textContent = unit.rarity.toUpperCase();
+  card.appendChild(rarityEl);
+
+  const tierEl = document.createElement('div');
+  tierEl.className = 'result-tier';
+  tierEl.textContent = `Tier ${unit.tier}`;
+  card.appendChild(tierEl);
+
+  return card;
+}
+
+// ============================================================
+//  LOADOUT MODAL
+// ============================================================
+let _loadoutSelected = [];
+
+function openLoadoutModal() {
+  _loadoutSelected = getLoadout(_user.username).slice();
+  renderLoadoutGrid();
+  document.getElementById('loadout-modal').classList.remove('hidden');
+}
+
+function renderLoadoutGrid() {
+  const unlocked = getUnlockedUnits(_user.username);
+  const grid = document.getElementById('loadout-grid');
+  grid.innerHTML = '';
+  document.getElementById('loadout-count').textContent = _loadoutSelected.length;
+
+  const RARITY_RANK = { common: 0, rare: 1, epic: 2, legendary: 3, divine: 4, mystery: 5 };
+  const ownedUnits  = [...GACHA_POOL].filter(u =>  unlocked.includes(u.key)).sort((a,b) => RARITY_RANK[a.rarity] - RARITY_RANK[b.rarity]);
+  const lockedUnits = [...GACHA_POOL].filter(u => !unlocked.includes(u.key)).sort((a,b) => RARITY_RANK[a.rarity] - RARITY_RANK[b.rarity]);
+
+  function addLoUnit(unit) {
+    const isUnlocked = unlocked.includes(unit.key);
+    const isSelected = _loadoutSelected.includes(unit.key);
+    const el = document.createElement('div');
+    el.className = 'lo-unit rarity-border-' + unit.rarity
+      + (isUnlocked ? '' : ' lo-locked')
+      + (isSelected ? ' lo-selected' : '');
+    el.title = isUnlocked ? unit.name : unit.name + ' (Locked)';
+    const cv = makeTowerCanvas(unit.key, 44, !isUnlocked);
+    cv.className = 'lo-canvas';
+    el.appendChild(cv);
+
+    const loName = document.createElement('div');
+    loName.className = 'lo-name';
+    loName.textContent = unit.name;
+    el.appendChild(loName);
+
+    if (isSelected) {
+      const check = document.createElement('div');
+      check.className = 'lo-check';
+      check.textContent = '✓';
+      el.appendChild(check);
+    }
+    if (isUnlocked) {
+      el.addEventListener('click', () => toggleLoadoutUnit(unit.key));
+    }
+    grid.appendChild(el);
+  }
+
+  function addLoSection(label, units) {
+    if (units.length === 0) return;
+    const hdr = document.createElement('div');
+    hdr.className = 'lo-section-header';
+    hdr.textContent = label;
+    grid.appendChild(hdr);
+    units.forEach(addLoUnit);
+  }
+
+  addLoSection(`Unlocked (${ownedUnits.length})`, ownedUnits);
+  addLoSection(`Locked (${lockedUnits.length})`, lockedUnits);
+}
+
+function toggleLoadoutUnit(key) {
+  const idx = _loadoutSelected.indexOf(key);
+  if (idx !== -1) {
+    _loadoutSelected.splice(idx, 1);
+  } else {
+    if (_loadoutSelected.length >= 5) {
+      // Flash the counter red
+      const counter = document.getElementById('loadout-count');
+      counter.style.color = '#ff4040';
+      setTimeout(() => counter.style.color = '', 500);
+      return;
+    }
+    _loadoutSelected.push(key);
+  }
+  renderLoadoutGrid();
+}
+
+document.getElementById('btn-loadout-save').addEventListener('click', () => {
+  if (_loadoutSelected.length !== 5) {
+    const counter = document.getElementById('loadout-count');
+    counter.style.color = '#ff4040';
+    setTimeout(() => counter.style.color = '', 600);
+    return;
+  }
+  saveLoadout(_user.username, _loadoutSelected);
+  document.getElementById('loadout-modal').classList.add('hidden');
+});
+
+document.getElementById('loadout-close').addEventListener('click', () => {
+  document.getElementById('loadout-modal').classList.add('hidden');
+});
+document.getElementById('loadout-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('loadout-modal'))
+    document.getElementById('loadout-modal').classList.add('hidden');
+});
+
+// ============================================================
+//  PROFILE MODAL
+// ============================================================
+function openProfileModal() {
+  const acc = getAccountData(_user.username);
+  if (!acc) return;
+
+  // Header: avatar + name + crystals
+  const nameEl = document.getElementById('profile-name');
+  nameEl.innerHTML = `
+    <div class="profile-avatar">${acc.username.charAt(0).toUpperCase()}</div>
+    <div class="profile-name-text">
+      <div class="profile-username">${acc.username}</div>
+      <div class="profile-crystals">💎 ${(acc.crystals || 0).toLocaleString()} crystals</div>
+    </div>
+  `;
+
+  // Stats grid
+  const s = acc.stats;
+  const winRate = s.gamesPlayed > 0 ? Math.round(s.victories / s.gamesPlayed * 100) : 0;
+  document.getElementById('profile-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-card-val">${s.gamesPlayed}</div><div class="stat-card-lbl">Games</div></div>
+    <div class="stat-card"><div class="stat-card-val">${s.victories}</div><div class="stat-card-lbl">Victories</div></div>
+    <div class="stat-card"><div class="stat-card-val">${winRate}%</div><div class="stat-card-lbl">Win Rate</div></div>
+    <div class="stat-card"><div class="stat-card-val">${s.bestWave}</div><div class="stat-card-lbl">Best Wave</div></div>
+    <div class="stat-card"><div class="stat-card-val">${s.totalKills.toLocaleString()}</div><div class="stat-card-lbl">Total Kills</div></div>
+    <div class="stat-card"><div class="stat-card-val">${(getUnlockedUnits(_user.username).length)}</div><div class="stat-card-lbl">Units Owned</div></div>
+  `;
+
+  // Collection
+  const unlocked = getUnlockedUnits(_user.username);
+  document.getElementById('collection-count').textContent = unlocked.length;
+  const grid = document.getElementById('collection-grid');
+  grid.innerHTML = '';
+
+  const RARITY_RANK = { common: 0, rare: 1, epic: 2, legendary: 3, divine: 4, mystery: 5 };
+  const ownedUnits  = [...GACHA_POOL].filter(u =>  unlocked.includes(u.key)).sort((a,b) => RARITY_RANK[a.rarity] - RARITY_RANK[b.rarity]);
+  const lockedUnits = [...GACHA_POOL].filter(u => !unlocked.includes(u.key)).sort((a,b) => RARITY_RANK[a.rarity] - RARITY_RANK[b.rarity]);
+
+  function addCollSection(label, units) {
+    if (units.length === 0) return;
+    const hdr = document.createElement('div');
+    hdr.className = 'coll-section-header';
+    hdr.textContent = label;
+    grid.appendChild(hdr);
+    for (const unit of units) {
+      const isUnlocked = unlocked.includes(unit.key);
+      const el = document.createElement('div');
+      el.className = `coll-unit rarity-border-${unit.rarity}` + (isUnlocked ? '' : ' coll-locked');
+      el.title = unit.name + (isUnlocked ? '' : ' (Locked)');
+      const cv = makeTowerCanvas(unit.key, 38, !isUnlocked);
+      cv.className = 'coll-canvas';
+      el.appendChild(cv);
+      const collName = document.createElement('div');
+      collName.className = 'coll-name';
+      collName.textContent = unit.name;
+      el.appendChild(collName);
+      grid.appendChild(el);
+    }
+  }
+
+  addCollSection(`Unlocked (${ownedUnits.length})`, ownedUnits);
+  addCollSection(`Locked (${lockedUnits.length})`, lockedUnits);
+
+  // History
+  const hist = document.getElementById('profile-history');
+  hist.innerHTML = '';
+  if (!acc.history || acc.history.length === 0) {
+    hist.innerHTML = '<div class="hist-empty">No runs yet. Enter the battlefield!</div>';
+  } else {
+    for (const r of acc.history.slice(0, 10)) {
+      const d = new Date(r.date);
+      const dateStr = `${d.getMonth()+1}/${d.getDate()}`;
+      hist.innerHTML += `
+        <div class="hist-item">
+          <span class="${r.won ? 'hist-win' : 'hist-loss'}">${r.won ? '✓ Victory' : '✗ Defeat'}</span>
+          <span>Wave ${r.wave}</span>
+          <span>${(r.kills || 0).toLocaleString()} kills</span>
+          <span class="hist-gems">+${r.gems || 0} 💎</span>
+          <span class="hist-date">${dateStr}</span>
+        </div>`;
+    }
+  }
+
+  document.getElementById('profile-modal').classList.remove('hidden');
+}
+
+document.getElementById('profile-close').addEventListener('click', () => {
+  document.getElementById('profile-modal').classList.add('hidden');
+});
+document.getElementById('profile-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('profile-modal'))
+    document.getElementById('profile-modal').classList.add('hidden');
+});
+
+// ============================================================
+//  ENEMIES MODAL
+// ============================================================
+// Sorted from least → most difficult (difficulty field drives the order)
+const ENEMY_CODEX = [
+  {
+    key: 'grunt', name: 'Grunt', firstWave: 1, difficulty: 1, iconR: 18,
+    hp: 60, speed: 'Slow', armor: 'None',
+    threat: 'low',
+    ability: 'No special ability — pure numbers.',
+    desc: 'The most common enemy in the valley. Weak alone, dangerous in hordes.'
+  },
+  {
+    key: 'speeder', name: 'Speeder', firstWave: 8, difficulty: 2, iconR: 16,
+    hp: 30, speed: 'Very Fast', armor: 'None',
+    threat: 'medium',
+    ability: 'Rushes past slow-firing towers before they can react.',
+    desc: 'Fragile but blindingly fast. Slips through gaps in your defenses.'
+  },
+  {
+    key: 'armored', name: 'Armored', firstWave: 6, difficulty: 3, iconR: 19,
+    hp: 150, speed: 'Slow', armor: '40%',
+    threat: 'medium',
+    ability: 'Heavy plating reduces all incoming damage by 40%.',
+    desc: 'A walking fortress. Needs armor-piercing or high burst damage to crack.'
+  },
+  {
+    key: 'flyer', name: 'Flyer', firstWave: 12, difficulty: 4, iconR: 17,
+    hp: 80, speed: 'Medium', armor: '10%',
+    threat: 'medium',
+    ability: 'Ignores the path — flies directly from spawn to base.',
+    desc: 'Bypasses all ground-based obstacles. Only towers with range can stop it.'
+  },
+  {
+    key: 'invisible', name: 'Invisible', firstWave: 13, difficulty: 5, iconR: 17,
+    hp: 70, speed: 'Medium', armor: 'None',
+    threat: 'medium',
+    ability: 'Blinks between invisible and visible every 1 second.',
+    desc: 'While invisible, towers cannot target it. Scout towers reveal the threat.'
+  },
+  {
+    key: 'spawner_mini', name: 'Spawn Imp', firstWave: 16, difficulty: 6, iconR: 14,
+    hp: 40, speed: 'Fast', armor: 'None',
+    threat: 'low',
+    ability: 'Spawned by the Spawner mid-wave.',
+    desc: 'Small but numerous. They appear from nowhere and flood your kill zones.'
+  },
+  {
+    key: 'healer', name: 'Healer', firstWave: 14, difficulty: 7, iconR: 16,
+    hp: 40, speed: 'Medium', armor: 'None',
+    threat: 'high',
+    ability: 'Heals all nearby enemies for 5 HP per second within 60px.',
+    desc: 'A priority target — its support aura can negate your entire damage output.'
+  },
+  {
+    key: 'glass_assassin', name: 'Glass Assassin', firstWave: 12, difficulty: 8, iconR: 15,
+    hp: 45, speed: 'Extreme', armor: 'None',
+    threat: 'high',
+    ability: 'On death: spawns a massive Brute in its place.',
+    desc: 'It dies easily — but killing it is exactly what it wants. The real threat emerges after.'
+  },
+  {
+    key: 'splitter', name: 'Splitter', firstWave: 14, difficulty: 9, iconR: 19,
+    hp: 120, speed: 'Medium', armor: 'None',
+    threat: 'high',
+    ability: 'Splits into 2 halves on death. Each half splits into 2 shards — 4 total.',
+    desc: 'Killing it makes things worse. Coordinate burst damage to wipe all fragments at once.'
+  },
+  {
+    key: 'spawner', name: 'Spawner', firstWave: 16, difficulty: 10, iconR: 18,
+    hp: 350, speed: 'Very Slow', armor: '20%',
+    threat: 'high',
+    ability: 'Releases 2 Spawn Imps every 4 seconds while walking.',
+    desc: 'A walking hatchery. Kill it fast or be overwhelmed by its endless stream of imps.'
+  },
+  {
+    key: 'brute', name: 'Brute', firstWave: 12, difficulty: 11, iconR: 19,
+    hp: 500, speed: 'Very Slow', armor: '50%',
+    threat: 'high',
+    ability: 'Spawned when a Glass Assassin dies.',
+    desc: 'A titanic monster unleashed mid-wave. It was always hiding inside the Assassin.'
+  },
+  {
+    key: 'tank', name: 'Tank', firstWave: 21, difficulty: 12, iconR: 19,
+    hp: 400, speed: 'Very Slow', armor: '60%',
+    threat: 'high',
+    ability: '60% damage reduction and enough HP to absorb an entire wave\'s fire.',
+    desc: 'The lumbering titan of the valley. Burns through life points when it breaks through.'
+  },
+  {
+    key: 'shielder', name: 'Shielder', firstWave: 18, difficulty: 13, iconR: 19,
+    hp: 200, speed: 'Slow', armor: '30%',
+    threat: 'extreme',
+    ability: 'Projects a 40% damage reduction aura to all allies within 70px.',
+    desc: 'The most dangerous support enemy. While alive, nearby enemies are nearly invincible.'
+  },
+  {
+    key: 'disruptor', name: 'Disruptor', firstWave: 20, difficulty: 14, iconR: 18,
+    hp: 140, speed: 'Medium', armor: '10%',
+    threat: 'extreme',
+    ability: 'Pulses every 4 seconds — silences all towers within 110px for 1.5 seconds.',
+    desc: 'An electric nightmare that shuts down your defenses just long enough for the wave to pour through.'
+  },
+  {
+    key: 'boss', name: 'Boss', firstWave: 15, difficulty: 15, iconR: 11,
+    hp: 1200, speed: 'Slow', armor: '30%',
+    threat: 'extreme',
+    ability: 'Absorbs massive damage and steals 3 lives on breakthrough.',
+    desc: 'A demonic warlord. Every 5 waves, it leads the charge personally.'
+  },
+];
+ENEMY_CODEX.sort((a, b) => a.difficulty - b.difficulty);
+
+const THREAT_LABEL = { low: 'Low', medium: 'Medium', high: 'High', extreme: 'Extreme' };
+const THREAT_COLOR = { low: '#60c070', medium: '#f0c040', high: '#ff8030', extreme: '#ff3060' };
+
+let _enemyFilter = 'all';
+
+function openEnemiesModal() {
+  const acc = getAccountData(_user.username);
+  const bestWave = acc ? (acc.stats.bestWave || 0) : 0;
+  renderEnemiesGrid(bestWave);
+  document.getElementById('enemies-modal').classList.remove('hidden');
+}
+
+function renderEnemiesGrid(bestWave) {
+  const grid = document.getElementById('enemies-grid');
+  grid.innerHTML = '';
+
+  for (const e of ENEMY_CODEX) {
+    const discovered = bestWave >= e.firstWave;
+    if (_enemyFilter === 'discovered'   && !discovered) continue;
+    if (_enemyFilter === 'undiscovered' && discovered)  continue;
+
+    const card = document.createElement('div');
+    card.className = 'enemy-card' + (discovered ? '' : ' enemy-undiscovered');
+
+    // Icon canvas
+    const cv = document.createElement('canvas');
+    cv.width = 80; cv.height = 80;
+    cv.className = 'enemy-icon-canvas';
+    drawEnemyIcon(cv, e, discovered);
+    card.appendChild(cv);
+
+    if (!discovered) {
+      // Unknown card
+      const unk = document.createElement('div');
+      unk.className = 'enemy-unknown-label';
+      unk.textContent = '???';
+      card.appendChild(unk);
+      const wave = document.createElement('div');
+      wave.className = 'enemy-first-wave enemy-locked-wave';
+      wave.textContent = `Unlocks wave ${e.firstWave}`;
+      card.appendChild(wave);
+      grid.appendChild(card);
+      continue;
+    }
+
+    // Name
+    const name = document.createElement('div');
+    name.className = 'enemy-name';
+    name.textContent = e.name;
+    card.appendChild(name);
+
+    // Threat badge
+    const threat = document.createElement('div');
+    threat.className = 'enemy-threat';
+    threat.textContent = THREAT_LABEL[e.threat];
+    threat.style.color = THREAT_COLOR[e.threat];
+    threat.style.borderColor = THREAT_COLOR[e.threat] + '55';
+    card.appendChild(threat);
+
+    // Stats row
+    const stats = document.createElement('div');
+    stats.className = 'enemy-stats';
+    stats.innerHTML = `
+      <span class="estat"><span class="estat-lbl">HP</span> ${e.hp}</span>
+      <span class="estat"><span class="estat-lbl">Speed</span> ${e.speed}</span>
+      <span class="estat"><span class="estat-lbl">Armor</span> ${e.armor}</span>
+    `;
+    card.appendChild(stats);
+
+    // Ability
+    const ab = document.createElement('div');
+    ab.className = 'enemy-ability';
+    ab.innerHTML = `<span class="enemy-ability-label">⚡ Ability:</span> ${e.ability}`;
+    card.appendChild(ab);
+
+    // Description
+    const desc = document.createElement('div');
+    desc.className = 'enemy-desc';
+    desc.textContent = e.desc;
+    card.appendChild(desc);
+
+    // First wave
+    const wave = document.createElement('div');
+    wave.className = 'enemy-first-wave';
+    wave.textContent = `First appears: Wave ${e.firstWave}`;
+    card.appendChild(wave);
+
+    grid.appendChild(card);
+  }
+
+  if (grid.children.length === 0) {
+    grid.innerHTML = '<div class="enemies-empty">No enemies match this filter.</div>';
+  }
+}
+
+function drawEnemyIcon(cv, e, discovered) {
+  const ctx = cv.getContext('2d');
+  const half = cv.width / 2;
+  if (!discovered) {
+    ctx.fillStyle = '#1a1410';
+    ctx.beginPath(); ctx.arc(half, half, half - 4, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#3a2e10';
+    ctx.beginPath(); ctx.arc(half, half, half - 4, 0, Math.PI*2); ctx.stroke();
+    ctx.fillStyle = '#4a3820';
+    ctx.font = `bold ${Math.floor(half * 1.1)}px Arial`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('?', half, half);
+    return;
+  }
+  ctx.save();
+  ctx.translate(half, half);
+  const fakeEnemy = { isSkeleton: false, isBoss: e.key === 'boss' };
+  _drawEnemyAvatar(ctx, e.key, e.iconR, fakeEnemy);
+  ctx.restore();
+}
+
+document.getElementById('card-draft').addEventListener('click', () => {
+  window.location.href = 'index.html?mode=draft';
+});
+document.getElementById('card-enemies').addEventListener('click', openEnemiesModal);
+document.getElementById('enemies-close').addEventListener('click', () => {
+  document.getElementById('enemies-modal').classList.add('hidden');
+});
+document.getElementById('enemies-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('enemies-modal'))
+    document.getElementById('enemies-modal').classList.add('hidden');
+});
+
+document.querySelectorAll('.enemy-filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.enemy-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    _enemyFilter = btn.dataset.filter;
+    const acc = getAccountData(_user.username);
+    const bestWave = acc ? (acc.stats.bestWave || 0) : 0;
+    renderEnemiesGrid(bestWave);
+  });
+});
+</script>
+</body>
+</html>
