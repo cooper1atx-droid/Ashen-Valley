@@ -214,12 +214,20 @@ class WaveManager {
         this.spawnTimer = this.spawnInterval;
         const type = this.spawnQueue.shift();
         const enemy = new Enemy(type);
-        // Scale enemies in infinite mode beyond wave 30
-        if (this.isInfinite && this.currentWave > TOTAL_WAVES) {
-          const scale = 1 + (this.currentWave - TOTAL_WAVES) * 0.15;
-          enemy.hp    = Math.ceil(enemy.hp    * scale);
-          enemy.maxHp = Math.ceil(enemy.maxHp * scale);
-          enemy.reward = Math.ceil(enemy.reward * (1 + (this.currentWave - TOTAL_WAVES) * 0.08));
+        if (this.isInfinite) {
+          if (this.currentWave > TOTAL_WAVES) {
+            // Scale enemies up beyond wave 30
+            const scale = 1 + (this.currentWave - TOTAL_WAVES) * 0.15;
+            enemy.hp    = Math.ceil(enemy.hp    * scale);
+            enemy.maxHp = Math.ceil(enemy.maxHp * scale);
+            enemy.reward = Math.ceil(enemy.reward * (1 + (this.currentWave - TOTAL_WAVES) * 0.08));
+          } else if (this.currentWave <= 20) {
+            // Scale enemies down for early waves so new players can survive
+            // Wave 1 = 45% HP, ramps up to 100% by wave 20
+            const hpScale = 0.45 + (this.currentWave - 1) * (0.55 / 19);
+            enemy.hp    = Math.ceil(enemy.hp    * hpScale);
+            enemy.maxHp = Math.ceil(enemy.maxHp * hpScale);
+          }
         }
         enemies.push(enemy);
         this.activeEnemies++;
@@ -272,8 +280,9 @@ class WaveManager {
       if (enemies[i].dead || enemies[i].reached) enemies.splice(i, 1);
     }
 
-    // Wave completion bonus
-    const bonus = 25 + this.currentWave * 2;
+    // Wave completion bonus (infinite mode gets a bigger bonus to help sustain)
+    const baseBonus = 25 + this.currentWave * 2;
+    const bonus = this.isInfinite ? Math.ceil(baseBonus * 1.5) : baseBonus;
     this.economy.addGold(bonus);
     this.effects.addFloatText(COLS * CELL / 2, ROWS * CELL / 2 - 40, `+${bonus}g Wave Bonus!`, 'float-gold');
 

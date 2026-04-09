@@ -236,6 +236,17 @@ body {
   filter: grayscale(0.7);
 }
 
+.tower-btn.draft-locked {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.tower-btn.draft-locked:hover {
+  background: inherit;
+  transform: none;
+}
+
 .tower-btn-canvas {
   width: 46px;
   height: 46px;

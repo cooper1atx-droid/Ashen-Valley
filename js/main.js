@@ -42,11 +42,16 @@ function init() {
   // Init subsystems
   const floatLayer = document.getElementById('float-layer');
   effects = new EffectsManager(floatLayer);
-  economy = new Economy(isDraftMode ? 80 : 300, 20, effects);
+  economy = new Economy(isDraftMode ? 80 : isInfiniteMode ? 500 : 300, 20, effects);
   // Draft mode: gold only exists for upgrades — scale kill rewards way down
   if (isDraftMode) {
     const _origAdd = economy.addGold.bind(economy);
     economy.addGold = (amount, x, y) => _origAdd(Math.ceil(amount * 0.3), x, y);
+  }
+  // Infinite mode: slight kill gold boost to help early game
+  if (isInfiniteMode) {
+    const _origAdd = economy.addGold.bind(economy);
+    economy.addGold = (amount, x, y) => _origAdd(Math.ceil(amount * 1.3), x, y);
   }
   waveManager = new WaveManager(economy, effects);
   waveManager.isInfinite = isInfiniteMode;
@@ -78,6 +83,7 @@ function init() {
     recordGameResult(true, gemsEarned);
 
     // Draft mode reward: unlock The Jester
+    const user = getCurrentUser();
     if (isDraftMode && user) {
       const alreadyHas = getUnlockedUnits(user.username).includes('jester');
       if (!alreadyHas) {

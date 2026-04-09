@@ -76,7 +76,7 @@ const TOWER_DEFS = [
     id: 5, key: 'cannon',
     name: 'Cannon', abbr: 'CN', tier: 1,
     color: '#808080', textColor: '#181818',
-    cost: 150,
+    cost: 180,
     damage: 50, attackSpeed: 4.0, range: 110,
     targetType: 'aoe', aoeRadius: 96,
     description: 'Massive AoE blast, slow reload.',
@@ -124,7 +124,7 @@ const TOWER_DEFS = [
     id: 8, key: 'poisonAlchemist',
     name: 'Poison Alchemist', abbr: 'PA', tier: 2,
     color: '#80c040', textColor: '#102008',
-    cost: 210,
+    cost: 185,
     damage: 5, poisonDamage: 12, poisonDuration: 5, attackSpeed: 2.0, range: 110,
     targetType: 'aoe', aoeRadius: 48,
     description: 'Creates toxic puddles that slow and poison.',
@@ -220,7 +220,7 @@ const TOWER_DEFS = [
     id: 14, key: 'healerMonk',
     name: 'Healer Monk', abbr: 'HM', tier: 3,
     color: '#fff080', textColor: '#201800',
-    cost: 500,
+    cost: 440,
     damage: 5, attackSpeed: 3.0, range: 96,
     targetType: 'aoe',
     description: 'Every 8s grants adjacent towers +20% atk speed for 5s. Slows enemies.',
@@ -357,7 +357,7 @@ const TOWER_DEFS = [
   {
     id:24, key:'oilThrower', name:'Oil Thrower', abbr:'OT', tier:1,
     color:'#505050', textColor:'#c8c8c8',
-    cost:90, damage:5, attackSpeed:3.0, range:100, targetType:'aoe', aoeRadius:52,
+    cost:60, damage:5, attackSpeed:3.0, range:100, targetType:'aoe', aoeRadius:52,
     description:'Drops oil slicks. Oiled enemies take 2× fire damage.',
     upgrades:[{cost:70,desc:'Oil radius +20px'},{cost:120,desc:'Oil lasts longer'},{cost:180,desc:'Oil ignites: 8 dmg/s'}],
     abilityName:'Oil Slick', abilityDesc:'Oiled enemies take double fire dmg'
@@ -365,7 +365,7 @@ const TOWER_DEFS = [
   {
     id:25, key:'ballistae', name:'Ballistae', abbr:'BA', tier:1,
     color:'#787870', textColor:'#181818',
-    cost:120, damage:30, attackSpeed:3.0, range:160, pierceCount:1, targetType:'pierce',
+    cost:145, damage:30, attackSpeed:3.0, range:160, pierceCount:1, targetType:'pierce',
     description:'Very long range. Armor piercing.',
     upgrades:[{cost:90,desc:'+15 dmg'},{cost:140,desc:'Pierces 2 enemies'},{cost:200,desc:'30% armor shred on hit'}],
     abilityName:'Armor Pierce', abilityDesc:'Ignores 20% of enemy armor'
@@ -373,7 +373,7 @@ const TOWER_DEFS = [
   {
     id:26, key:'bombPoster', name:'Bomb Thrower', abbr:'BT', tier:1,
     color:'#484848', textColor:'#e8e8e8',
-    cost:110, damage:35, attackSpeed:6.0, range:105, targetType:'aoe', aoeRadius:60,
+    cost:135, damage:35, attackSpeed:6.0, range:105, targetType:'aoe', aoeRadius:60,
     description:'Slow fire rate; every hit stuns 1s.',
     upgrades:[{cost:80,desc:'+20 dmg'},{cost:130,desc:'Stun radius doubles'},{cost:200,desc:'Cluster: 3 mini-bombs on impact'}],
     abilityName:'Stun Bomb', abilityDesc:'Every hit stuns center enemy 1s'
@@ -381,7 +381,7 @@ const TOWER_DEFS = [
   {
     id:27, key:'thornBush', name:'Thorn Bush', abbr:'TB', tier:1,
     color:'#408040', textColor:'#f0f0f0',
-    cost:45, damage:0, attackSpeed:0, range:55, targetType:'passive',
+    cost:30, damage:0, attackSpeed:0, range:55, targetType:'passive',
     description:'Passive. Damages all enemies that enter range.',
     upgrades:[{cost:35,desc:'Thorn dmg +4/s'},{cost:60,desc:'Range +20px'},{cost:100,desc:'Slows enemies hit by thorns 15%'}],
     abilityName:'Thorns', abilityDesc:'6 dmg/s to all enemies in range'
@@ -465,7 +465,7 @@ const TOWER_DEFS = [
   {
     id:37, key:'stormCaller', name:'Storm Caller', abbr:'SC', tier:3,
     color:'#b0d0ff', textColor:'#080818',
-    cost:420, damage:60, attackSpeed:0, range:999, targetType:'passive',
+    cost:500, damage:60, attackSpeed:0, range:999, targetType:'passive',
     description:'Every 4s calls lightning strike on 3 random enemies.',
     upgrades:[{cost:320,desc:'Strike 5 enemies'},{cost:420,desc:'Strike dmg +40'},{cost:580,desc:'Each strike chains to 1 nearby'}],
     abilityName:'Call Storm', abilityDesc:'Every 4s: 60 dmg lightning hits 3 enemies'
@@ -553,7 +553,7 @@ const TOWER_DEFS = [
   {
     id:48, key:'spiritGuide', name:'Spirit Guide', abbr:'SG', tier:3,
     color:'#e0f0ff', textColor:'#081020',
-    cost:470, damage:30, attackSpeed:0, range:130, targetType:'passive',
+    cost:420, damage:30, attackSpeed:0, range:130, targetType:'passive',
     description:'On enemy death in range: releases a homing spirit dealing 30 dmg.',
     upgrades:[{cost:360,desc:'Spirit dmg → 50'},{cost:460,desc:'2 spirits per kill'},{cost:620,desc:'Spirits chain to 1 extra enemy'}],
     abilityName:'Release Spirit', abilityDesc:'On nearby kill: homing spirit deals 30 dmg'
@@ -569,7 +569,7 @@ const TOWER_DEFS = [
   {
     id:50, key:'soulHarvester', name:'Soul Harvester', abbr:'SH', tier:3,
     color:'#c060c0', textColor:'#fff0ff',
-    cost:560, damage:0, attackSpeed:0, range:130, targetType:'passive',
+    cost:470, damage:0, attackSpeed:0, range:130, targetType:'passive',
     description:'Collects 1 soul per nearby kill. Every 12s releases burst: 25 dmg × souls.',
     upgrades:[{cost:420,desc:'Burst dmg → 35/soul'},{cost:540,desc:'Cooldown → 8s'},{cost:730,desc:'Souls also slow enemies on release'}],
     abilityName:'Soul Burst', abilityDesc:'Every 12s: releases accumulated souls as burst'
@@ -619,15 +619,15 @@ const TOWER_DEFS = [
   {
     id:56, key:'thunderGod', name:'Thunder God', abbr:'TG', tier:4,
     color:'#f8f840', textColor:'#202000',
-    cost:1250, damage:30, attackSpeed:0, range:180, targetType:'passive',
-    description:'Every 8s: chain lightning hits EVERY enemy on the map.',
+    cost:1250, damage:30, attackSpeed:1.5, range:180, targetType:'single',
+    description:'Attacks with lightning bolts. Every 8s: chain lightning hits all enemies in range.',
     upgrades:[{cost:960,desc:'Chain dmg → 80'},{cost:1150,desc:'Also stuns all hit 0.5s'},{cost:1550,desc:'Overcharge: every 3rd activation triples damage'}],
-    abilityName:'Divine Thunder', abilityDesc:'Every 8s: 50 lightning dmg to all enemies'
+    abilityName:'Divine Thunder', abilityDesc:'Every 8s: 30 lightning dmg to all enemies in range'
   },
   {
     id:57, key:'naturesWrath', name:"Nature's Wrath", abbr:'NW', tier:4,
     color:'#40c040', textColor:'#002000',
-    cost:1100, damage:100, attackSpeed:0, range:200, targetType:'passive',
+    cost:1100, damage:200, attackSpeed:0, range:200, targetType:'passive',
     description:'Every 15s: wave of thorns sweeps the path, dealing 200 AoE dmg.',
     upgrades:[{cost:840,desc:'Dmg → 300'},{cost:1000,desc:'2 thorn waves'},{cost:1350,desc:'Thorns also poison 20dmg/s for 5s'}],
     abilityName:'Thorn Wave', abilityDesc:'Every 15s: 200 dmg AoE sweeps path'
@@ -665,13 +665,13 @@ const TOWER_DEFS = [
     cost: 1400,
     damage: 0, attackSpeed: 0, range: 160,
     targetType: 'divine_aura',
-    description: 'Slows all enemies in range 50%. Heals +1 life every 30s.',
+    description: 'Slows all enemies in range 30%. Heals +1 life every 60s.',
     upgrades: [
-      { cost: 1000, desc: 'Slow 30% → 40%, heal every 45s' },
-      { cost: 1200, desc: 'Slow 40% → 50%, heal every 30s' },
+      { cost: 1000, desc: 'Slow 30% → 40%, heal 60s → 45s' },
+      { cost: 1200, desc: 'Slow 40% → 50%, heal 45s → 30s' },
       { cost: 1600, desc: 'Heal every 20s, slow aura +32px range' }
     ],
-    abilityName: 'Divine Aura', abilityDesc: '50% slow aura, heal +1 life every 30s'
+    abilityName: 'Divine Aura', abilityDesc: '30% slow aura, heal +1 life every 60s'
   },
   {
     id: 62, key: 'archangelCommander',
@@ -737,38 +737,38 @@ const TOWER_DEFS = [
 
   // ── NEW COMMON (Tier 1) ──────────────────────────────────────
   { id:66, key:'torchbearer', name:'Torchbearer', abbr:'TB', tier:1, color:'#e86020', textColor:'#fff0e0', cost:85, damage:10, attackSpeed:1.0, range:105, targetType:'single', description:'Applies burn on every hit.', upgrades:[{cost:60,desc:'Burn dmg 8→12/s'},{cost:100,desc:'Burn duration 2→3s'},{cost:160,desc:'+5 damage'}], abilityName:'Ignite', abilityDesc:'Every hit applies burn 8dmg/s 2s' },
-  { id:67, key:'hedgeKnight', name:'Hedge Knight', abbr:'HK', tier:1, color:'#8090a0', textColor:'#0a1018', cost:120, damage:35, attackSpeed:2.8, range:80, targetType:'single', description:'Short-range melee powerhouse.', upgrades:[{cost:90,desc:'+10 damage'},{cost:140,desc:'Range +20px'},{cost:200,desc:'Cleave: hits 2nd closest enemy 50%'}], abilityName:'Cleave', abilityDesc:'Chance to hit adjacent enemy' },
-  { id:68, key:'rifleman', name:'Rifleman', abbr:'RF', tier:1, color:'#b0a080', textColor:'#201808', cost:110, damage:28, attackSpeed:2.2, range:180, targetType:'single', description:'Long-range accurate single shot.', upgrades:[{cost:80,desc:'+8 damage'},{cost:130,desc:'Range +20px'},{cost:190,desc:'Headshot: 20% chance double dmg'}], abilityName:'Headshot', abilityDesc:'20% chance double damage' },
+  { id:67, key:'hedgeKnight', name:'Hedge Knight', abbr:'HK', tier:1, color:'#8090a0', textColor:'#0a1018', cost:140, damage:35, attackSpeed:2.8, range:80, targetType:'single', description:'Short-range melee powerhouse.', upgrades:[{cost:90,desc:'+10 damage'},{cost:140,desc:'Range +20px'},{cost:200,desc:'Cleave: hits 2nd closest enemy 50%'}], abilityName:'Cleave', abilityDesc:'Chance to hit adjacent enemy' },
+  { id:68, key:'rifleman', name:'Rifleman', abbr:'RF', tier:1, color:'#b0a080', textColor:'#201808', cost:130, damage:28, attackSpeed:2.2, range:180, targetType:'single', description:'Long-range accurate single shot.', upgrades:[{cost:80,desc:'+8 damage'},{cost:130,desc:'Range +20px'},{cost:190,desc:'Headshot: 20% chance double dmg'}], abilityName:'Headshot', abilityDesc:'20% chance double damage' },
   { id:69, key:'netThrower', name:'Net Thrower', abbr:'NT', tier:1, color:'#909860', textColor:'#181c08', cost:95, damage:8, attackSpeed:2.0, range:115, targetType:'single', description:'Stuns enemies briefly on hit.', upgrades:[{cost:70,desc:'Stun 0.8→1.2s'},{cost:110,desc:'Range +20px'},{cost:170,desc:'Post-stun slow 30% for 2s'}], abilityName:'Ensnare', abilityDesc:'Stuns hit enemy 0.8s' },
   { id:70, key:'brawler', name:'Brawler', abbr:'BW', tier:1, color:'#c06040', textColor:'#200800', cost:80, damage:15, attackSpeed:0.6, range:65, targetType:'single', description:'Tiny range, rapid hits, bleeds enemy.', upgrades:[{cost:60,desc:'+5 damage'},{cost:100,desc:'Bleed dmg 5→8/s'},{cost:160,desc:'Range +15px'}], abilityName:'Frenzy', abilityDesc:'Applies bleed 5dmg/s 2s on hit' },
-  { id:71, key:'herbalist', name:'Herbalist', abbr:'HL', tier:1, color:'#70c060', textColor:'#081808', cost:90, damage:6, attackSpeed:1.8, range:100, targetType:'aoe', aoeRadius:55, description:'Herb cloud slows nearby enemies.', upgrades:[{cost:65,desc:'Slow 25→35%'},{cost:110,desc:'AoE radius +15px'},{cost:175,desc:'Also applies poison 4dmg/s 2s'}], abilityName:'Herb Cloud', abilityDesc:'AoE slows 25%, small AoE damage' },
+  { id:71, key:'herbalist', name:'Herbalist', abbr:'HL', tier:1, color:'#70c060', textColor:'#081808', cost:60, damage:6, attackSpeed:1.8, range:100, targetType:'aoe', aoeRadius:55, description:'Herb cloud slows nearby enemies.', upgrades:[{cost:65,desc:'Slow 25→35%'},{cost:110,desc:'AoE radius +15px'},{cost:175,desc:'Also applies poison 4dmg/s 2s'}], abilityName:'Herb Cloud', abilityDesc:'AoE slows 25%, small AoE damage' },
   { id:72, key:'watchtowerPost', name:'Watch Post', abbr:'WP', tier:1, color:'#d0b870', textColor:'#201000', cost:60, damage:0, attackSpeed:0, range:240, targetType:'support', description:'Reveals invisible. Marks enemies for +10% damage.', upgrades:[{cost:50,desc:'Range +50px'},{cost:90,desc:'Marked enemies take +10% dmg'},{cost:150,desc:'Mark bonus→20%'}], abilityName:'Vigilance', abilityDesc:'Reveals all invisible in range, marks targets' },
-  { id:73, key:'demolisher', name:'Demolisher', abbr:'DM', tier:1, color:'#606060', textColor:'#e0e0e0', cost:130, damage:45, attackSpeed:8.0, range:120, targetType:'aoe', aoeRadius:70, description:'Slow-firing massive AoE bomb.', upgrades:[{cost:100,desc:'+20 damage'},{cost:150,desc:'AoE radius +20px'},{cost:220,desc:'Center stun 1s'}], abilityName:'Demolish', abilityDesc:'Large AoE explosion every 8s' },
+  { id:73, key:'demolisher', name:'Demolisher', abbr:'DM', tier:1, color:'#606060', textColor:'#e0e0e0', cost:160, damage:45, attackSpeed:8.0, range:120, targetType:'aoe', aoeRadius:70, description:'Slow-firing massive AoE bomb.', upgrades:[{cost:100,desc:'+20 damage'},{cost:150,desc:'AoE radius +20px'},{cost:220,desc:'Center stun 1s'}], abilityName:'Demolish', abilityDesc:'Large AoE explosion every 8s' },
 
   // ── NEW RARE (Tier 2) ────────────────────────────────────────
   { id:74, key:'bloodArcher', name:'Blood Archer', abbr:'BA', tier:2, color:'#c03030', textColor:'#ffe8e8', cost:220, damage:20, attackSpeed:1.0, range:130, targetType:'single', description:'Each kill grants bonus gold.', upgrades:[{cost:170,desc:'+8 damage'},{cost:240,desc:'Kill gold 3→5g'},{cost:320,desc:'Heal 1 life per 20 kills'}], abilityName:'Blood Price', abilityDesc:'+3g gold on every kill' },
-  { id:75, key:'ironGolemTower', name:'Iron Golem', abbr:'IG', tier:2, color:'#707080', textColor:'#e0e0f0', cost:280, damage:55, attackSpeed:3.5, range:90, targetType:'single', description:'Ignores armor. Bonus damage to armored.', upgrades:[{cost:210,desc:'+15 damage'},{cost:290,desc:'Stuns armored 0.5s'},{cost:380,desc:'+15 damage, slam AoE 60px'}], abilityName:'Iron Fist', abilityDesc:'Ignores armor, +50% to armored enemies' },
+  { id:75, key:'ironGolemTower', name:'Iron Golem', abbr:'IG', tier:2, color:'#707080', textColor:'#e0e0f0', cost:340, damage:55, attackSpeed:3.5, range:90, targetType:'single', description:'Ignores armor. Bonus damage to armored.', upgrades:[{cost:210,desc:'+15 damage'},{cost:290,desc:'Stuns armored 0.5s'},{cost:380,desc:'+15 damage, slam AoE 60px'}], abilityName:'Iron Fist', abilityDesc:'Ignores armor, +50% to armored enemies' },
   { id:76, key:'chronoMage', name:'Chrono Mage', abbr:'CM', tier:2, color:'#a0c0ff', textColor:'#081828', cost:240, damage:18, attackSpeed:2.5, range:120, targetType:'single', description:'Freezes each hit enemy briefly.', upgrades:[{cost:180,desc:'Freeze 0.5→0.8s'},{cost:260,desc:'+6 damage'},{cost:340,desc:'Frozen take +30% dmg from all'}], abilityName:'Timestop', abilityDesc:'Each hit freezes enemy 0.5s' },
   { id:77, key:'boneShaman', name:'Bone Shaman', abbr:'BS', tier:2, color:'#c8b870', textColor:'#281808', cost:230, damage:12, attackSpeed:1.2, range:115, targetType:'single', description:'Curses enemies to take more damage.', upgrades:[{cost:175,desc:'Curse dmg bonus 20→25%'},{cost:250,desc:'Curse duration 3→5s'},{cost:330,desc:'Curse spreads to nearest enemy'}], abilityName:'Bone Curse', abilityDesc:'Hit enemies take +20% dmg for 3s' },
   { id:78, key:'tideCaller', name:'Tide Caller', abbr:'TI', tier:2, color:'#4080c0', textColor:'#e0f0ff', cost:260, damage:15, attackSpeed:4.0, range:110, targetType:'aoe', aoeRadius:70, description:'Wave pushes enemies back.', upgrades:[{cost:200,desc:'Push distance 40→60px'},{cost:270,desc:'+10 damage'},{cost:360,desc:'Wave interval 4→3s'}], abilityName:'Tidal Wave', abilityDesc:'AoE wave pushes enemies back 40px' },
   { id:79, key:'vineTrap', name:'Vine Trap', abbr:'VT', tier:2, color:'#508040', textColor:'#e8ffe0', cost:210, damage:10, attackSpeed:2.5, range:105, targetType:'single', description:'Roots enemies in place on hit.', upgrades:[{cost:160,desc:'Root 1.5→2s'},{cost:230,desc:'+5 damage'},{cost:300,desc:'Root spreads to 1 adjacent enemy'}], abilityName:'Entangle', abilityDesc:'Roots hit enemy 1.5s' },
-  { id:80, key:'glassCannonTower', name:'Glass Cannon', abbr:'GC', tier:2, color:'#d0e0ff', textColor:'#102040', cost:300, damage:50, attackSpeed:1.8, range:85, targetType:'single', description:'Highest tier-2 damage, short range.', upgrades:[{cost:230,desc:'+20 damage'},{cost:310,desc:'Range +15px'},{cost:400,desc:'25% crit chance: triple damage'}], abilityName:'Overcharge', abilityDesc:'Highest damage, very short range' },
+  { id:80, key:'glassCannonTower', name:'Glass Cannon', abbr:'GC', tier:2, color:'#d0e0ff', textColor:'#102040', cost:330, damage:50, attackSpeed:1.8, range:85, targetType:'single', description:'Highest tier-2 damage, short range.', upgrades:[{cost:230,desc:'+20 damage'},{cost:310,desc:'Range +15px'},{cost:400,desc:'25% crit chance: triple damage'}], abilityName:'Overcharge', abilityDesc:'Highest damage, very short range' },
   { id:81, key:'sandGolemTower', name:'Sand Golem', abbr:'SG', tier:2, color:'#d0b870', textColor:'#201000', cost:250, damage:20, attackSpeed:2.0, range:110, targetType:'aoe', aoeRadius:65, description:'AoE sand blast slows and blinds.', upgrades:[{cost:190,desc:'Slow 40→50%'},{cost:260,desc:'AoE radius +15px'},{cost:340,desc:'Blinded enemies deal -30% lives damage'}], abilityName:'Sandblast', abilityDesc:'AoE slows 40% for 3s' },
   { id:82, key:'thunderDrum', name:'Thunder Drum', abbr:'TD', tier:2, color:'#8060c0', textColor:'#f0e8ff', cost:245, damage:30, attackSpeed:14.0, range:100, targetType:'aoe', aoeRadius:80, description:'Stuns all enemies in range every 8s.', upgrades:[{cost:185,desc:'Stun 0.8→1.2s'},{cost:260,desc:'Range +20px'},{cost:340,desc:'Also deals 50 damage on stun'}], abilityName:'Thunder Clap', abilityDesc:'Stuns all in range every 8s' },
 
   // ── NEW EPIC (Tier 3) ────────────────────────────────────────
   { id:83, key:'phoenixTower', name:'Phoenix Tower', abbr:'PX', tier:3, color:'#ff6820', textColor:'#200800', cost:520, damage:40, attackSpeed:1.5, range:130, targetType:'single', description:'Attacks normally. Every 20s erupts in inferno burst.', upgrades:[{cost:400,desc:'+15 damage'},{cost:500,desc:'Burst AoE dmg 100→150'},{cost:680,desc:'Burst leaves fire zones 3s'}], abilityName:'Inferno Burst', abilityDesc:'Every 20s: 100 AoE fire dmg in range' },
-  { id:84, key:'voidStalkerTower', name:'Void Stalker', abbr:'VS', tier:3, color:'#502080', textColor:'#e0c0ff', cost:550, damage:55, attackSpeed:1.3, range:160, targetType:'single', description:'Always targets highest HP enemy. Ignores armor.', upgrades:[{cost:420,desc:'+15 damage'},{cost:520,desc:'Slows target 20%'},{cost:700,desc:'On kill: instantly attacks next target'}], abilityName:'Hunt', abilityDesc:'Targets strongest, ignores armor' },
+  { id:84, key:'voidStalkerTower', name:'Void Stalker', abbr:'VS', tier:3, color:'#502080', textColor:'#e0c0ff', cost:630, damage:55, attackSpeed:1.3, range:160, targetType:'single', description:'Always targets highest HP enemy. Ignores armor.', upgrades:[{cost:420,desc:'+15 damage'},{cost:520,desc:'Slows target 20%'},{cost:700,desc:'On kill: instantly attacks next target'}], abilityName:'Hunt', abilityDesc:'Targets strongest, ignores armor' },
   { id:85, key:'astralCannon', name:'Astral Cannon', abbr:'AC2', tier:3, color:'#6080e0', textColor:'#f0f0ff', cost:560, damage:0, attackSpeed:0, range:9999, targetType:'passive', description:'Charges 15s then fires a beam dealing 300 dmg to all enemies in a line.', upgrades:[{cost:430,desc:'Charge 15→12s'},{cost:530,desc:'Beam dmg 300→450'},{cost:720,desc:'Fires 2 beams simultaneously'}], abilityName:'Stellar Beam', abilityDesc:'15s charge → devastating line beam, 300dmg' },
   { id:86, key:'runeForger', name:'Rune Forger', abbr:'RN', tier:3, color:'#e0a8f8', textColor:'#200820', cost:500, damage:25, attackSpeed:2.0, range:140, targetType:'single', description:'Empowers nearby towers with damage runes.', upgrades:[{cost:380,desc:'Rune bonus 25→30%'},{cost:480,desc:'Range +20px'},{cost:640,desc:'Also grants +15% range rune'}], abilityName:'Runic Empowerment', abilityDesc:'Towers within 80px gain +25% damage' },
-  { id:87, key:'infernoDrake', name:'Inferno Drake', abbr:'IK', tier:3, color:'#d04010', textColor:'#fff0e0', cost:540, damage:35, attackSpeed:0.12, range:140, targetType:'single', description:'Rapid fire breath, ignites ground on upgrade.', upgrades:[{cost:410,desc:'+10 damage per shot'},{cost:510,desc:'Attack speed faster'},{cost:680,desc:'Leaves burning ground 5dmg/s 3s'}], abilityName:'Fire Breath', abilityDesc:'Rapid continuous fire breath' },
-  { id:88, key:'tempestCallerTower', name:'Tempest Caller', abbr:'TL', tier:3, color:'#80a8f8', textColor:'#081020', cost:530, damage:25, attackSpeed:3.0, range:130, targetType:'aoe', aoeRadius:90, description:'Wind AoE pushes enemies back.', upgrades:[{cost:400,desc:'Push 50→70px'},{cost:500,desc:'+10 damage'},{cost:660,desc:'Push also slows 30% for 2s'}], abilityName:'Gale Force', abilityDesc:'AoE wind blast pushes enemies back 50px' },
-  { id:89, key:'deathKnight', name:'Death Knight', abbr:'DK', tier:3, color:'#403060', textColor:'#d0c0ff', cost:560, damage:45, attackSpeed:1.8, range:120, targetType:'single', description:'Attacks enemies, summons skeleton every 15s.', upgrades:[{cost:430,desc:'Summon timer 15→10s'},{cost:530,desc:'+15 damage'},{cost:700,desc:'Death aura: 8dmg/s to nearby enemies'}], abilityName:'Raise Dead', abilityDesc:'Summons skeleton warrior every 15s' },
+  { id:87, key:'infernoDrake', name:'Inferno Drake', abbr:'IK', tier:3, color:'#d04010', textColor:'#fff0e0', cost:610, damage:35, attackSpeed:0.12, range:140, targetType:'single', description:'Rapid fire breath, ignites ground on upgrade.', upgrades:[{cost:410,desc:'+10 damage per shot'},{cost:510,desc:'Attack speed faster'},{cost:680,desc:'Leaves burning ground 5dmg/s 3s'}], abilityName:'Fire Breath', abilityDesc:'Rapid continuous fire breath' },
+  { id:88, key:'tempestCallerTower', name:'Tempest Caller', abbr:'TL', tier:3, color:'#80a8f8', textColor:'#081020', cost:470, damage:25, attackSpeed:3.0, range:130, targetType:'aoe', aoeRadius:90, description:'Wind AoE pushes enemies back.', upgrades:[{cost:400,desc:'Push 50→70px'},{cost:500,desc:'+10 damage'},{cost:660,desc:'Push also slows 30% for 2s'}], abilityName:'Gale Force', abilityDesc:'AoE wind blast pushes enemies back 50px' },
+  { id:89, key:'deathKnight', name:'Death Knight', abbr:'DK', tier:3, color:'#403060', textColor:'#d0c0ff', cost:600, damage:45, attackSpeed:1.8, range:120, targetType:'single', description:'Attacks enemies, summons skeleton every 15s.', upgrades:[{cost:430,desc:'Summon timer 15→10s'},{cost:530,desc:'+15 damage'},{cost:700,desc:'Death aura: 8dmg/s to nearby enemies'}], abilityName:'Raise Dead', abilityDesc:'Summons skeleton warrior every 15s' },
   { id:90, key:'leechWraith', name:'Leech Wraith', abbr:'LW', tier:3, color:'#602080', textColor:'#f0c0ff', cost:520, damage:30, attackSpeed:1.2, range:135, targetType:'single', description:'Each kill grants bonus gold and heals lives slowly.', upgrades:[{cost:400,desc:'Kill gold 8→12g'},{cost:490,desc:'Heals 1 life per 10 kills'},{cost:660,desc:'Drain 20% enemy max HP over 3s'}], abilityName:'Life Drain', abilityDesc:'+8g per kill, heals 1 life per 15 kills' },
   { id:91, key:'warpGate', name:'Warp Gate', abbr:'WG', tier:3, color:'#8040e0', textColor:'#f8f0ff', cost:580, damage:0, attackSpeed:0, range:130, targetType:'divine_aura', description:'Every 12s teleports nearest enemy back on the path.', upgrades:[{cost:440,desc:'Cooldown 12→8s'},{cost:540,desc:'Teleports 2 enemies'},{cost:720,desc:'Teleported enemies take 100 damage'}], abilityName:'Phase Shift', abilityDesc:'Every 12s: teleports nearest enemy to start of range' },
   { id:92, key:'crystalGolem', name:'Crystal Golem', abbr:'CG', tier:3, color:'#80e8d8', textColor:'#081820', cost:510, damage:40, attackSpeed:2.5, range:100, targetType:'aoe', aoeRadius:60, description:'AoE shard attack. Crystal nova every 20s.', upgrades:[{cost:390,desc:'+10 damage'},{cost:490,desc:'Shards pierce 2 enemies'},{cost:650,desc:'Crystal nova every 20s: 150 AoE dmg'}], abilityName:'Crystal Shards', abilityDesc:'AoE shard attack, crystal nova every 20s' },
-  { id:93, key:'stormWyvern', name:'Storm Wyvern', abbr:'SW', tier:3, color:'#90b8f8', textColor:'#081020', cost:550, damage:35, attackSpeed:20.0, range:240, targetType:'passive', description:'Flies across map every 10s striking all enemies with lightning.', upgrades:[{cost:420,desc:'2 passes per flight'},{cost:520,desc:'+20 damage per strike'},{cost:700,desc:'Stuns 0.5s on each strike'}], abilityName:'Storm Strafe', abilityDesc:'Every 10s: flies across map, strikes all enemies' },
-  { id:94, key:'mysticWell', name:'Mystic Well', abbr:'MW', tier:3, color:'#80d0e0', textColor:'#082028', cost:490, damage:0, attackSpeed:0, range:160, targetType:'divine_aura', description:'Slows enemies 35% in range. Pulses +2g every 8s.', upgrades:[{cost:370,desc:'Slow 35→45%'},{cost:470,desc:'Gold pulse every 6s'},{cost:630,desc:'Slow 45→55%, +3g per pulse'}], abilityName:'Arcane Flow', abilityDesc:'35% slow aura, +2g economy pulse every 8s' },
+  { id:93, key:'stormWyvern', name:'Storm Wyvern', abbr:'SW', tier:3, color:'#90b8f8', textColor:'#081020', cost:600, damage:35, attackSpeed:20.0, range:240, targetType:'passive', description:'Flies across map every 10s striking all enemies with lightning.', upgrades:[{cost:420,desc:'2 passes per flight'},{cost:520,desc:'+20 damage per strike'},{cost:700,desc:'Stuns 0.5s on each strike'}], abilityName:'Storm Strafe', abilityDesc:'Every 10s: flies across map, strikes all enemies' },
+  { id:94, key:'mysticWell', name:'Mystic Well', abbr:'MW', tier:3, color:'#80d0e0', textColor:'#082028', cost:490, damage:0, attackSpeed:0, range:160, targetType:'divine_aura', description:'Slows enemies 35% in range. Pulses +5g every 8s.', upgrades:[{cost:370,desc:'Slow 35→45%'},{cost:470,desc:'Gold pulse every 6s'},{cost:630,desc:'Slow 45→55%, +8g per pulse'}], abilityName:'Arcane Flow', abilityDesc:'35% slow aura, +5g economy pulse every 8s' },
 
   // ── NEW LEGENDARY (Tier 4) ───────────────────────────────────
   { id:95, key:'omegaCannon', name:'Omega Cannon', abbr:'OC', tier:4, color:'#a08870', textColor:'#100800', cost:1400, damage:0, attackSpeed:0, range:220, targetType:'passive', description:'Charges 20s then fires a 280dmg AoE blast in range.', upgrades:[{cost:1000,desc:'Charge 20→15s, dmg 280→380'},{cost:1200,desc:'Blast radius 110→150px'},{cost:1600,desc:'Fires 2 blasts in rapid succession'}], abilityName:'Omega Blast', abilityDesc:'20s charge → 280 AoE dmg, 110px radius' },
@@ -781,7 +781,7 @@ const TOWER_DEFS = [
   // ── TIER 5 — Legendary (draft reward only) ──────────────────
   { id:101, key:'jester', name:'The Jester', abbr:'JE', tier:5,
     color:'#d020c8', textColor:'#fff0ff',
-    cost:1200, damage:75, attackSpeed:1.2, range:165, targetType:'passive',
+    cost:1400, damage:75, attackSpeed:1.2, range:165, targetType:'passive',
     description:'Cycles through 5 attack modes each shot: Single → Circle → Line → Cone → Full AOE. Legendary reward for completing Draft mode.',
     upgrades:[
       {cost:800,  desc:'+35 damage across all modes'},
@@ -924,13 +924,13 @@ class Tower {
     } else if (k === 'shadowStalker') {
       this.specialState = { firstHitTargets: new Set() };
     } else if (k === 'stormCaller') {
-      this.specialState = { strikeTimer: 7, strikeCount: 2, strikeDmg: 40 };
+      this.specialState = { strikeTimer: 4, strikeCount: 3, strikeDmg: 60 };
     } else if (k === 'bloodKnight') {
       this.specialState = { killBonus: 0, killBonusPer: 3, killBonusCap: 120 };
     } else if (k === 'voidRifter') {
       this.specialState = { riftDmg: 15, riftSlow: 0.6, pull: false };
     } else if (k === 'banshee') {
-      this.specialState = { wailTimer: 12, wailPct: 0.08, stunOnWail: false };
+      this.specialState = { wailTimer: 12, wailPct: 0.15, stunOnWail: false };
     } else if (k === 'mechanic') {
       this.specialState = { repairTimer: 15, speedBuff: 0.2, dmgBuff: 0, repairPct: 0.25 };
     } else if (k === 'gravityWell') {
@@ -962,7 +962,7 @@ class Tower {
     } else if (k === 'thunderGod') {
       this.specialState = { strikeTimer: 8, strikeDmg: 30, strikeCount: 0, stunOnStrike: false };
     } else if (k === 'naturesWrath') {
-      this.specialState = { thrashTimer: 15, thrashDmg: 100, thrashCount: 1, thrashPoison: false };
+      this.specialState = { thrashTimer: 15, thrashDmg: 200, thrashCount: 1, thrashPoison: false };
     } else if (k === 'voidGolem') {
       this.specialState = { banishTimer: 30, banishCount: 1, banishDmg: 0 };
     } else if (k === 'starfallTower') {
@@ -1026,7 +1026,7 @@ class Tower {
     } else if (k === 'stormWyvern') {
       this.specialState = { flyTimer: 10, wyvernDmg: 35, passes: 1, stunOnPass: false, _wyverns: [] };
     } else if (k === 'mysticWell') {
-      this.specialState = { slowPct: 0.65, goldTimer: 8, goldInterval: 8, goldAmount: 2 };
+      this.specialState = { slowPct: 0.65, goldTimer: 8, goldInterval: 8, goldAmount: 5 };
     } else if (k === 'omegaCannon') {
       this.specialState = { chargeTimer: 20, chargeDur: 20, blastDmg: 280, blastRadius: 110, blastCount: 1 };
     } else if (k === 'lichLord') {
@@ -1525,7 +1525,7 @@ class Tower {
     } else if (k === 'mysticWell') {
       if (level === 1) { this.specialState.slowPct = 0.55; }
       if (level === 2) { this.specialState.goldInterval = 6; }
-      if (level === 3) { this.specialState.slowPct = 0.45; this.specialState.goldAmount = 3; }
+      if (level === 3) { this.specialState.slowPct = 0.45; this.specialState.goldAmount = 8; }
     } else if (k === 'omegaCannon') {
       if (level === 1) { this.specialState.chargeDur = 15; this.specialState.blastDmg = 380; }
       if (level === 2) { this.specialState.blastRadius = 150; }
@@ -2548,22 +2548,20 @@ class Tower {
         ss.strikeCount++;
         const tripleCharge = (this.upgradeLevel >= 3 && ss.strikeCount % 3 === 0);
         const finalDmg = tripleCharge ? ss.strikeDmg * 3 : ss.strikeDmg;
-        const all = enemies.filter(e => !e.dead && !e.reached);
-        for (const e of all) {
-          const dx = e.x - this.x, dy = e.y - this.y;
-          if (dx*dx + dy*dy > this.range * this.range) continue;
+        const inRange = enemies.filter(e => !e.dead && !e.reached && ((e.x-this.x)**2+(e.y-this.y)**2) <= this.range*this.range);
+        for (const e of inRange) {
           e.takeDamage(finalDmg, this);
           effects.addHitEffect(e.x, e.y, 'lightning');
           if (ss.stunOnStrike) e.applyStun(0.5);
           if (e.dead) { this.kills++; economy.addGold(e.reward, e.x, e.y); }
         }
-        if (all.length > 0) {
-          effects.addChainEffect(all.map(e => ({x:e.x,y:e.y})), this.x, this.y);
+        if (inRange.length > 0) {
+          effects.addChainEffect(inRange.map(e => ({x:e.x,y:e.y})), this.x, this.y);
           effects.addScreenShake(tripleCharge ? 10 : 5);
           effects.addFloatText(this.x, this.y-20, tripleCharge ? '⚡⚡⚡OVERCHARGE!' : '⚡DIVINE THUNDER!', 'float-crit');
         }
       }
-      return;
+      // falls through to standard single-target attack loop
     }
 
     if (k === 'naturesWrath') {
@@ -2857,11 +2855,13 @@ class Tower {
       ss.warpTimer -= dt;
       if (ss.warpTimer <= 0) {
         ss.warpTimer = ss.warpInterval;
-        const alive = enemies.filter(e => !e.dead && !e.reached).sort((a, b) => b.pathIndex - a.pathIndex);
+        const alive = enemies.filter(e => !e.dead && !e.reached && !e.isFlyer).sort((a, b) => b.distanceTraveled - a.distanceTraveled);
         const toWarp = alive.slice(0, ss.warpCount);
         for (const e of toWarp) {
-          e.pathIndex = Math.max(0, Math.floor(e.pathIndex * 0.4));
-          e.progress = 0;
+          e.waypointIndex = 1;
+          e.distanceTraveled = 0;
+          e.x = e.waypoints[0].x;
+          e.y = e.waypoints[0].y;
           effects.addHitEffect(e.x, e.y, 'shadow');
           effects.addFloatText(e.x, e.y, 'WARPED!', 'float-crit');
           if (ss.warpDmg > 0) e.takeDamage(ss.warpDmg, this);

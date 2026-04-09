@@ -41,7 +41,7 @@ class UI {
 
       const costEl  = document.createElement('div');
       costEl.className = 'tower-btn-cost';
-      costEl.textContent = `${def.cost}g`;
+      costEl.textContent = inDraft ? 'Draft' : `${def.cost}g`;
 
       const tierEl  = document.createElement('div');
       tierEl.className = 'tower-tier-badge';
@@ -90,6 +90,8 @@ class UI {
   }
 
   _onTowerBtnClick(key) {
+    const inDraft = typeof isDraftMode !== 'undefined' && isDraftMode;
+    if (inDraft) return; // in draft mode, clicking the bar does nothing — only draft picks place towers
     if (!this.economy.canAfford(TOWER_DEFS.find(d => d.key === key).cost)) return;
     if (this.selectedTowerType === key) {
       this.clearPlacementMode();
@@ -200,7 +202,8 @@ class UI {
     if (def.range > 0 && def.range < 9000) statsHtml += `Range: <b>${def.range}px</b><br>`;
     if (def.aoeRadius)       statsHtml += `AoE Radius: <b>${def.aoeRadius}px</b><br>`;
     if (def.pierceCount)     statsHtml += `Pierce: <b>${def.pierceCount}</b><br>`;
-    statsHtml += `Cost: <b>${def.cost}g</b><br>`;
+    const _inDraft = typeof isDraftMode !== 'undefined' && isDraftMode;
+    if (!_inDraft) statsHtml += `Cost: <b>${def.cost}g</b><br>`;
     statsHtml += `Tier: <b>${def.tier}</b>`;
     tip.innerHTML = `
       <div class="tt-name">${def.name}</div>
@@ -359,6 +362,7 @@ class UI {
       const atLimit = count >= def.maxCount;
       const inDraft = typeof isDraftMode !== 'undefined' && isDraftMode;
       btn.classList.toggle('unaffordable', !inDraft && !atLimit && !this.economy.canAfford(def.cost));
+      btn.classList.toggle('draft-locked', inDraft);
       btn.classList.toggle('at-limit', atLimit);
 
       // Update or create the count badge
