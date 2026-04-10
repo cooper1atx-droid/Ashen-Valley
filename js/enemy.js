@@ -195,6 +195,17 @@ class Enemy {
     this.taunted = false;    // stone golem taunt: -15% armor
     this.lichCursed = false; // lich lord curse: +20% damage taken
     this.blackHolePulled = false; // black hole effect
+    this.cursed = false;    // bone shaman / shadow priest curse
+    this.curseBonus = 0;    // bone shaman: +% damage taken
+    this.curseTimer = 0;    // bone shaman: duration
+    this.curseSpread = 0;   // shadow priest: spread % of damage to nearby
+    this.flareMarked = false;   // flare post: bonus damage
+    this.flareMarkBonus = 0;
+    this.marked = false;        // watch post: bonus damage
+    this.markBonus = 0;
+    this.mirrorSpread = 0;      // mirror mage: spread % of damage to nearby
+    this.mirrorTargets = 2;
+    this.mirrorEnemies = null;
 
     // Spin-up tracking (for Gatling)
     this.gatlingConsecutive = {};
@@ -247,7 +258,7 @@ class Enemy {
     return Math.max(0, armor);
   }
 
-  takeDamage(dmg, source) {
+  takeDamage(dmg, source, isSpread = false) {
     if (this.dead) return 0;
     let finalDmg = dmg * (1 - this.getEffectiveArmor());
     if (this.shielded) finalDmg *= 0.6; // shielder aura: 40% damage reduction
@@ -255,12 +266,24 @@ class Enemy {
     if (this.frozen && this.frozenDmgBonus) finalDmg *= 1.3;
     if (this.burnTimer > 0 && this.burningDmgBonus) finalDmg *= 1.2;
     if (this.markedByScout) finalDmg *= 1.15;
+    if (this.flareMarked && this.flareMarkBonus) finalDmg *= (1 + this.flareMarkBonus);
+    if (this.marked && this.markBonus) finalDmg *= (1 + this.markBonus);
     if (this.blackHolePulled) finalDmg *= 1.5;
     if (this.lichCursed) finalDmg *= 1.20;
+    if (this.cursed && this.curseBonus > 0) finalDmg *= (1 + this.curseBonus);
     this.hp -= finalDmg;
     if (this.hp <= 0) {
       this.hp = 0;
       this.dead = true;
+    }
+    // Mirror Mage — spread % of damage to nearby enemies (not from spread hits)
+    if (!isSpread && finalDmg > 0 && this.mirrorSpread > 0 && this.mirrorEnemies) {
+      const spreadDmg = finalDmg * this.mirrorSpread;
+      const targets = this.mirrorEnemies
+        .filter(o => o !== this && !o.dead && !o.reached)
+        .filter(o => { const dx = o.x-this.x, dy = o.y-this.y; return dx*dx+dy*dy <= 80*80; })
+        .slice(0, this.mirrorTargets || 2);
+      for (const o of targets) o.takeDamage(spreadDmg, source, true);
     }
     return finalDmg;
   }
@@ -361,6 +384,12 @@ class Enemy {
       }
     } else {
       this.slowFactor = 1.0;
+    }
+
+    // Bone Shaman curse decay
+    if (this.curseTimer > 0) {
+      this.curseTimer -= dt;
+      if (this.curseTimer <= 0) { this.curseTimer = 0; this.curseBonus = 0; this.cursed = false; }
     }
 
     // Chill decay

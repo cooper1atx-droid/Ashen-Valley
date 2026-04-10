@@ -275,7 +275,7 @@ const TOWER_DEFS = [
     upgrades: [
       { cost: 700,  desc: '2 dragons per flight' },
       { cost: 900,  desc: 'Burning trail 8dmg/s 3s' },
-      { cost: 1200, desc: 'Dragon targets strongest' }
+      { cost: 1200, desc: 'Dragon deals double damage' }
     ],
     abilityName: 'Dragon Flight',
     abilityDesc: 'Dragon flies across map every 12s'
@@ -441,8 +441,8 @@ const TOWER_DEFS = [
     color:'#909090', textColor:'#181818',
     cost:260, damage:0, attackSpeed:0, range:72, targetType:'passive',
     description:'Extremely tanky. Slows enemies in range by 25%.',
-    upgrades:[{cost:200,desc:'Slow → 35%, +200 HP'},{cost:280,desc:'+20 dmg aura'},{cost:400,desc:'Taunt: enemies in range take -15% armor'}],
-    abilityName:'Bulwark', abilityDesc:'25% slow aura, 600 HP; Taunt reduces enemy armor'
+    upgrades:[{cost:200,desc:'Slow → 35%, range +16px'},{cost:280,desc:'+20 dmg aura'},{cost:400,desc:'Taunt: enemies in range take -15% armor'}],
+    abilityName:'Bulwark', abilityDesc:'25% slow aura; upgrade 3: Taunt reduces enemy armor 15%'
   },
   {
     id:35, key:'crystalBow', name:'Crystal Bow', abbr:'CB', tier:2,
@@ -514,9 +514,9 @@ const TOWER_DEFS = [
     id:43, key:'thornGolem', name:'Thorn Golem', abbr:'TG', tier:3,
     color:'#30a030', textColor:'#e0ffe0',
     cost:490, damage:18, attackSpeed:1.2, range:80, targetType:'all_nearby',
-    description:'Hits all nearby enemies. Reflects 25% of damage back at attackers.',
-    upgrades:[{cost:370,desc:'Reflect → 35%'},{cost:480,desc:'+15 dmg'},{cost:650,desc:'On hit: poison nearby enemies'}],
-    abilityName:'Retaliate', abilityDesc:'Reflects 25% of dmg back at attackers'
+    description:'Hits all nearby enemies each attack. Poisons on upgrade.',
+    upgrades:[{cost:370,desc:'+8 damage, range +10px'},{cost:480,desc:'+15 dmg'},{cost:650,desc:'On hit: poison nearby enemies'}],
+    abilityName:'Thorn Slam', abilityDesc:'Hits all enemies in range each attack'
   },
   {
     id:44, key:'shadowPriest', name:'Shadow Priest', abbr:'SP', tier:3,
@@ -894,7 +894,7 @@ class Tower {
     } else if (k === 'amplifier') {
       this.specialState = { dmgBuff: 0.18, spdBuff: 0.1 };
     } else if (k === 'dragonNest') {
-      this.specialState = { dragons: [], dragonCount: 1, burnTrail: false, targetStrongest: false };
+      this.specialState = { dragons: [], dragonCount: 1, burnTrail: false, doubleDmg: false };
     } else if (k === 'teslaCoil') {
       this.specialState = { pulseCount: 0, shockChance: 0.3, stunDur: 0.4 };
     } else if (k === 'arcaneColossus') {
@@ -936,7 +936,7 @@ class Tower {
     } else if (k === 'gravityWell') {
       this.specialState = { pullDmg: 8, collapseTimer: 20, collapseActive: false };
     } else if (k === 'thornGolem') {
-      this.specialState = { reflectPct: 0.25, poisonOnHit: false };
+      this.specialState = { poisonOnHit: false };
     } else if (k === 'shadowPriest') {
       this.specialState = { cursed: new Set(), spreadPct: 0.30 };
     } else if (k === 'iceGolem') {
@@ -1235,7 +1235,7 @@ class Tower {
     } else if (k === 'dragonNest') {
       if (level === 1) { this.specialState.dragonCount = 2; }
       if (level === 2) { this.specialState.burnTrail = true; }
-      if (level === 3) { this.specialState.targetStrongest = true; }
+      if (level === 3) { this.specialState.doubleDmg = true; }
     } else if (k === 'blackHole') {
       if (level === 1) { this.specialState.pullRadius += 96; this.range += 96; }
       if (level === 2) { this.specialState.holdDur = 6; }
@@ -1302,7 +1302,7 @@ class Tower {
       if (level === 2) { this.specialState.runeBonus = 0.35; }
       if (level === 3) { this.specialState.runeSpeedBonus = 0.20; }
     } else if (k === 'stoneGolem') {
-      if (level === 1) { this.specialState.slowPct = 0.65; this.maxHp += 200; this.currentHp = Math.min(this.currentHp + 200, this.maxHp); }
+      if (level === 1) { this.specialState.slowPct = 0.65; this.range += 16; }
       if (level === 2) { this.specialState.damageAura = 20; }
       if (level === 3) { this.specialState.taunt = true; }
     } else if (k === 'crystalBow') {
@@ -1338,7 +1338,7 @@ class Tower {
       if (level === 2) { this.range += 25; }
       if (level === 3) { this.specialState.collapseActive = true; }
     } else if (k === 'thornGolem') {
-      if (level === 1) { this.specialState.reflectPct = 0.35; }
+      if (level === 1) { this.damage += 8; this.range += 10; }
       if (level === 2) { this.damage += 15; }
       if (level === 3) { this.specialState.poisonOnHit = true; }
     } else if (k === 'shadowPriest') {
@@ -1795,7 +1795,8 @@ class Tower {
           if (!e.dead && !e.reached && !d.hitEnemies.has(e.id)) {
             const ex = e.x - d.x, ey = e.y - d.y;
             if (ex*ex + ey*ey < 55*55) {
-              const dmg = e.takeDamage(this.damage * this.ampDmgBonus, this);
+              const dmgMult = ss.doubleDmg ? 2 : 1;
+              const dmg = e.takeDamage(this.damage * this.ampDmgBonus * dmgMult, this);
               effects.addHitEffect(e.x, e.y, 'fire');
               effects.addFloatText(e.x, e.y, `-${Math.round(dmg)}`, 'float-damage');
               if (ss.burnTrail) e.applyBurn(8, 3);
@@ -2182,7 +2183,7 @@ class Tower {
             for (const ring of rings) {
               if (proximity <= ring.threshold) slowAmt = ring.slow;
             }
-            slowAmt *= pullStr;
+            slowAmt = Math.min(slowAmt * pullStr, 1.0);
             e.slowFactor = Math.min(e.slowFactor, 1 - slowAmt);
             // Mild cosmetic nudge toward tower
             const nudge = (1 - proximity) * pullStr * 14 * dt;
@@ -2530,9 +2531,10 @@ class Tower {
           ss.rewindTimer = 45;
           const strongest = findStrongestEnemy(0, 0, 9999, enemies);
           if (strongest) {
-            strongest.x = strongest.pathPoints ? strongest.pathPoints[0].x : strongest.x;
-            strongest.y = strongest.pathPoints ? strongest.pathPoints[0].y : strongest.y;
-            strongest.pathIndex = 0; strongest.distanceTraveled = 0;
+            strongest.waypointIndex = 1;
+            strongest.distanceTraveled = 0;
+            strongest.x = strongest.waypoints[0].x;
+            strongest.y = strongest.waypoints[0].y;
             effects.addFloatText(strongest.x, strongest.y, 'REWIND!', 'float-crit');
           }
         }
@@ -2600,10 +2602,10 @@ class Tower {
         for (const e of targets) {
           if (ss.banishDmg > 0) e.takeDamage(ss.banishDmg, this);
           // Teleport to path start
-          if (e.pathPoints && e.pathPoints.length > 0) {
-            e.x = e.pathPoints[0].x; e.y = e.pathPoints[0].y;
-            e.pathIndex = 0; e.distanceTraveled = 0;
-          }
+          e.waypointIndex = 1;
+          e.distanceTraveled = 0;
+          e.x = e.waypoints[0].x;
+          e.y = e.waypoints[0].y;
           effects.addHitEffect(e.x, e.y, 'shadow');
           effects.addFloatText(e.x, e.y, 'BANISHED!', 'float-crit');
         }
@@ -2689,7 +2691,10 @@ class Tower {
             const d = e.takeDamage(this.damage * this.ampDmgBonus, this);
             if (d > 0) effects.addHitEffect(e.x, e.y, 'ice');
             // Push back along path
-            e.pathIndex = Math.max(0, e.pathIndex - 1);
+            e.waypointIndex = Math.max(1, e.waypointIndex - 1);
+            e.x = e.waypoints[e.waypointIndex - 1].x;
+            e.y = e.waypoints[e.waypointIndex - 1].y;
+            e.distanceTraveled = Math.max(0, e.distanceTraveled - 96);
             if (e.dead) { this.kills++; economy.addGold(e.reward, e.x, e.y); }
           }
         }
@@ -3836,11 +3841,25 @@ class Tower {
       }
 
     } else if (k === 'shadowPriest') {
+      const spreadEnemies = enemies;
       const proj = new Projectile(this.x, this.y, target, 'shadow', dmg, this);
       proj.onHit = (e, p, eff, eco) => {
         const d = e.takeDamage(p.damage, p.tower);
         if (d > 0) { eff.addHitEffect(e.x, e.y, 'shadow'); eff.addFloatText(e.x, e.y, `-${Math.round(d)}`, 'float-damage'); }
         e.cursed = true; e.curseSpread = p.tower.specialState.spreadPct;
+        // Spread % of damage dealt to nearby enemies
+        if (d > 0 && e.curseSpread > 0) {
+          const spreadDmg = d * e.curseSpread;
+          for (const other of spreadEnemies) {
+            if (other === e || other.dead || other.reached) continue;
+            const dx = other.x - e.x, dy = other.y - e.y;
+            if (dx*dx + dy*dy <= 80*80) {
+              const sd = other.takeDamage(spreadDmg, p.tower);
+              if (sd > 0) { eff.addHitEffect(other.x, other.y, 'shadow'); eff.addFloatText(other.x, other.y, `-${Math.round(sd)}`, 'float-damage'); }
+              if (other.dead) { p.tower.kills++; eco.addGold(other.reward, other.x, other.y); }
+            }
+          }
+        }
         if (e.dead) { p.tower.kills++; eco.addGold(e.reward, e.x, e.y); }
       };
       projectiles.push(proj);
@@ -4170,7 +4189,11 @@ class Tower {
       for (const e of hit) {
         const d = e.takeDamage(dmg, this);
         if (d > 0) { effects.addHitEffect(e.x, e.y, 'physical'); effects.addFloatText(e.x, e.y, `-${Math.round(d)}`, 'float-damage'); }
-        e.pathIndex = Math.max(0, e.pathIndex - Math.round(pushDist / 48));
+        const stepsBack = Math.round(pushDist / 48);
+        e.waypointIndex = Math.max(1, e.waypointIndex - stepsBack);
+        e.x = e.waypoints[e.waypointIndex - 1].x;
+        e.y = e.waypoints[e.waypointIndex - 1].y;
+        e.distanceTraveled = Math.max(0, e.distanceTraveled - pushDist);
         if (this.specialState.postSlow) e.applySlow(0.70, 2);
         if (e.dead) { this.kills++; economy.addGold(e.reward, e.x, e.y); }
       }

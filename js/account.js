@@ -11,7 +11,12 @@ function getAccounts() {
 }
 
 function saveAccounts(accounts) {
-  localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+  try {
+    localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+  } catch (e) {
+    console.error('Save failed (storage full?):', e);
+    alert('Warning: progress could not be saved. Your browser storage may be full.');
+  }
 }
 
 // Simple hash (not cryptographic — fine for local game saves)

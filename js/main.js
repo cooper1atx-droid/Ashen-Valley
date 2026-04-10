@@ -411,6 +411,7 @@ function applyAmplifierBuffs() {
       if (dx*dx + dy*dy <= r2) {
         tower.ampDmgBonus *= (1 + amp.specialState.dmgBuff);
         tower.ampSpdBonus *= (1 + amp.specialState.spdBuff);
+        if (amp.specialState.cooldownReduce > 0) tower.ampSpdBonus *= (1 + amp.specialState.cooldownReduce);
       }
     }
   }
