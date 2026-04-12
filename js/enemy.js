@@ -74,14 +74,14 @@ const ENEMY_TYPES = {
   },
   glass_assassin: {
     name: 'Glass Assassin',
-    hp: 45, speed: 220, armor: 0, reward: 18,
+    hp: 30, speed: 220, armor: 0, reward: 18,
     color: '#e8d060', size: 7, livesLost: 1,
     shape: 'diamond',
     deathSpawn: 'brute'
   },
   brute: {
     name: 'Brute',
-    hp: 500, speed: 35, armor: 0.5, reward: 25,
+    hp: 280, speed: 35, armor: 0.5, reward: 25,
     color: '#905040', size: 16, livesLost: 2,
     shape: 'hexagon'
   },

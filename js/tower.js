@@ -4320,7 +4320,7 @@ class Tower {
       ctx.beginPath(); ctx.arc(x, y, this.range, 0, Math.PI*2);
       ctx.fillStyle = gwGrad; ctx.fill();
     }
-    if (k === 'jester') {
+    if (k === 'jester' && isSelected) {
       const ss = this.specialState;
       const mode = ss ? ss.mode || 0 : 0;
       const rng = this.range;
@@ -4584,7 +4584,7 @@ class Tower {
         const orbitAngle = fa;
         const impactX = x + Math.cos(orbitAngle) * rng * 0.75;
         const impactY = y + Math.sin(orbitAngle) * rng * 0.75;
-        ctx.beginPath(); ctx.arc(impactX, impactY, this.def.aoeRadius, 0, Math.PI * 2);
+        ctx.beginPath(); ctx.arc(impactX, impactY, this.aoeRadius, 0, Math.PI * 2);
         ctx.strokeStyle = 'rgba(255,215,0,0.4)'; ctx.lineWidth = 1.5;
         ctx.setLineDash([4, 4]); ctx.stroke(); ctx.setLineDash([]);
         // Line from tower to impact point

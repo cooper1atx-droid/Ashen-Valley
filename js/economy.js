@@ -42,6 +42,7 @@ class Economy {
   }
 
   loseLife(amount) {
+    if (this._isAdmin()) return this.lives; // infinite lives
     this.lives = Math.max(0, this.lives - amount);
     this._notify('lives');
     return this.lives;
